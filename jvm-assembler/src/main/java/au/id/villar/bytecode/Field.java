@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Field extends Member {
 
-	public Field(AccessFlags accessFlags, String name, String descriptor, List<Attribute> attributes) {
-		super(accessFlags, name, descriptor, attributes);
-	}
+    public Field(AccessFlags accessFlags, String name, String descriptor, List<Attribute> attributes) {
+        super(accessFlags, name, descriptor, attributes);
+    }
 
 }

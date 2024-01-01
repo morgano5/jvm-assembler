@@ -1,4 +1,4 @@
-package au.id.villar.bytecode.parser.constant;
+package au.id.villar.bytecode.constant;
 
 public enum MethodHandleReferenceKind {
 	GET_FIELD(1),

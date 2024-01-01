@@ -1,36 +1,37 @@
 package au.id.villar.bytecode.parser;
 
-import au.id.villar.bytecode.parser.constant.Constant;
+import au.id.villar.bytecode.parser.constant.ParsingConstant;
 
 import java.io.InputStream;
 
-public class ClassFileHandler {
+public interface ClassFileHandler {
 
-	public enum NumberType {
-		MAYOR,
-		MINOR,
+    enum NumberType {
+        MAYOR,
+        MINOR,
 
-		ACCESS_FLAGS,
-		THIS_INDEX,
-		SUPER_INDEX,
+        ACCESS_FLAGS,
+        THIS_INDEX,
+        SUPER_INDEX,
 
-		CONSTANT_POOL,
-		INTERFACES,
-		FIELDS,
-		METHODS,
-		ATTRIBUTES
-	}
+        CONSTANT_POOL,
+        INTERFACES,
+        FIELDS,
+        METHODS,
+        ATTRIBUTES
+    }
 
-	public void number(int number, NumberType numberType) {}
+    default void number(int number, NumberType numberType) {}
 
-	public void constant(Constant constant, int index) {}
+    default void constant(ParsingConstant constant, int index) {}
 
-	public void interfaceIndex(int constantPoolIndex) {}
+    default void interfaceIndex(int constantPoolIndex) {}
 
-	public void field(int accessFlags, int nameIndex, int descriptorIndex) {}
+    default void field(int accessFlags, int nameIndex, int descriptorIndex) {}
 
-	public void method(int accessFlags, int nameIndex, int descriptorIndex) {}
+    default void method(int accessFlags, int nameIndex, int descriptorIndex) {}
 
-	public void attribute(int nameIndex, int length, InputStream info) {}
+    default void attribute(int nameIndex, int length, InputStream info) {}
 
+    default void end() {}
 }

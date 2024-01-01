@@ -8,41 +8,41 @@ import java.util.List;
 
 class Member {
 
-	private final AccessFlags accessFlags;
-	private final String name;
-	private final String descriptor;
-	private final List<Attribute> attributes;
+    private final AccessFlags accessFlags;
+    private final String name;
+    private final String descriptor;
+    private final List<Attribute> attributes;
 
-	public Member(AccessFlags accessFlags, String name, String descriptor, List<Attribute> attributes) {
-		this.accessFlags = accessFlags;
-		this.name = name;
-		this.descriptor = descriptor;
-		this.attributes = Collections.unmodifiableList(new ArrayList<>(attributes));
-	}
+    public Member(AccessFlags accessFlags, String name, String descriptor, List<Attribute> attributes) {
+        this.accessFlags = accessFlags;
+        this.name = name;
+        this.descriptor = descriptor;
+        this.attributes = Collections.unmodifiableList(new ArrayList<>(attributes));
+    }
 
-	public AccessFlags getAccessFlags() {
-		return accessFlags;
-	}
+    public AccessFlags getAccessFlags() {
+        return accessFlags;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getDescriptor() {
-		return descriptor;
-	}
+    public String getDescriptor() {
+        return descriptor;
+    }
 
-	public List<Attribute> getAttributes() {
-		return attributes;
-	}
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
 
-	@Override
-	public String toString() {
-		return this.getClass().getSimpleName() + "{" +
-				"accessFlags=" + accessFlags +
-				", name='" + name + '\'' +
-				", descriptor='" + descriptor + '\'' +
-				", attributes=" + attributes +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{" +
+                "accessFlags=" + accessFlags +
+                ", name='" + name + '\'' +
+                ", descriptor='" + descriptor + '\'' +
+                ", attributes=" + attributes +
+                '}';
+    }
 }

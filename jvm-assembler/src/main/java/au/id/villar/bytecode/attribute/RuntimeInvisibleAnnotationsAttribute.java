@@ -6,10 +6,10 @@ import java.util.List;
 
 public class RuntimeInvisibleAnnotationsAttribute extends RuntimeAnnotationsAttribute {
 
-	public RuntimeInvisibleAnnotationsAttribute(List<Annotation> annotations) {
-		super(annotations);
-	}
+    public RuntimeInvisibleAnnotationsAttribute(List<Annotation> annotations) {
+        super(annotations);
+    }
 
-	RuntimeInvisibleAnnotationsAttribute() {}
+    RuntimeInvisibleAnnotationsAttribute() {}
 
 }

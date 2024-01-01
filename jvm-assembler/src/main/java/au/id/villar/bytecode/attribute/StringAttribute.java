@@ -2,21 +2,21 @@ package au.id.villar.bytecode.attribute;
 
 abstract class StringAttribute extends Attribute {
 
-	protected String value;
+    protected String value;
 
-	StringAttribute(String value) {
-		this.value = value;
-	}
+    StringAttribute(String value) {
+        this.value = value;
+    }
 
-	StringAttribute() {}
+    StringAttribute() {}
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	@Override
-	public String toString() {
-		return this.getClass().getSimpleName() + "{value=" + value + '}';
-	}
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{value=" + value + '}';
+    }
 
 }

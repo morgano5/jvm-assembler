@@ -1,10 +1,10 @@
 package au.id.villar.bytecode.attribute;
 
-import au.id.villar.bytecode.parser.constant.Constant;
+import au.id.villar.bytecode.parser.constant.ParsingConstant;
+import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
-import java.util.Map;
 
 abstract class PoolConstantStringAttribute extends StringAttribute {
 
@@ -15,8 +15,8 @@ abstract class PoolConstantStringAttribute extends StringAttribute {
 	PoolConstantStringAttribute() {}
 
 	@Override
-	public void parseBody(int length, BytesReader bytesReader, Map<Integer, Constant> constantPool) throws IOException {
-		value = Constant.toString(bytesReader.readShort(), constantPool);
+	public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+		value = ParsingConstant.toString(bytesReader.readShort(), constantPool);
 	}
 
 }

@@ -1,39 +1,38 @@
 package au.id.villar.bytecode.attribute.frame;
 
 import au.id.villar.bytecode.attribute.frame.type.VerificationTypeInfo;
-import au.id.villar.bytecode.parser.constant.Constant;
+import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class SameLocalsOneStackItemFrame extends ExplicitOffsetDeltaFrame {
 
-	private VerificationTypeInfo typeInfo;
+    private VerificationTypeInfo typeInfo;
 
-	SameLocalsOneStackItemFrame(int offsetDelta) {
-		super(offsetDelta);
-	}
+    SameLocalsOneStackItemFrame(int offsetDelta) {
+        super(offsetDelta);
+    }
 
-	public SameLocalsOneStackItemFrame(int offsetDelta, VerificationTypeInfo typeInfo) {
-		super(offsetDelta);
-		this.typeInfo = typeInfo;
-	}
+    public SameLocalsOneStackItemFrame(int offsetDelta, VerificationTypeInfo typeInfo) {
+        super(offsetDelta);
+        this.typeInfo = typeInfo;
+    }
 
-	public VerificationTypeInfo getTypeInfo() {
-		return typeInfo;
-	}
+    public VerificationTypeInfo getTypeInfo() {
+        return typeInfo;
+    }
 
-	@Override
-	void parseBody(BytesReader bytesReader, Map<Integer, Constant> constantPool) throws IOException {
-		typeInfo = VerificationTypeInfo.readVerificationTypeInfo(bytesReader, constantPool);
-	}
+    @Override
+    void parseBody(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+        typeInfo = VerificationTypeInfo.readVerificationTypeInfo(bytesReader, constantPool);
+    }
 
-	@Override
-	public String toString() {
-		return this.getClass().getSimpleName() + "{" +
-				"offsetDelta=" + getOffsetDelta() +
-				", typeInfo=" + typeInfo +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{" +
+                "offsetDelta=" + getOffsetDelta() +
+                ", typeInfo=" + typeInfo +
+                '}';
+    }
 }

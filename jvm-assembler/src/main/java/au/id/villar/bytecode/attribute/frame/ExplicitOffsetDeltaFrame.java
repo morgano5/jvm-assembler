@@ -2,14 +2,14 @@ package au.id.villar.bytecode.attribute.frame;
 
 public abstract class ExplicitOffsetDeltaFrame extends StackMapFrame {
 
-	private int offsetDelta;
+    private int offsetDelta;
 
-	ExplicitOffsetDeltaFrame(int offsetDelta) {
-		this.offsetDelta = offsetDelta;
-	}
+    ExplicitOffsetDeltaFrame(int offsetDelta) {
+        this.offsetDelta = offsetDelta;
+    }
 
-	public int getOffsetDelta() {
-		return offsetDelta;
-	}
+    public int getOffsetDelta() {
+        return offsetDelta;
+    }
 
 }

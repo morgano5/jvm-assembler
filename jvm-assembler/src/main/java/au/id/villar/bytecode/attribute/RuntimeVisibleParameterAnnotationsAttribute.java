@@ -6,10 +6,10 @@ import java.util.List;
 
 public class RuntimeVisibleParameterAnnotationsAttribute extends RuntimeParameterAnnotationsAttribute {
 
-	public RuntimeVisibleParameterAnnotationsAttribute(List<List<Annotation>> parameterAnnotations) {
-		super(parameterAnnotations);
-	}
+    public RuntimeVisibleParameterAnnotationsAttribute(List<List<Annotation>> parameterAnnotations) {
+        super(parameterAnnotations);
+    }
 
-	public RuntimeVisibleParameterAnnotationsAttribute() {
-	}
+    public RuntimeVisibleParameterAnnotationsAttribute() {
+    }
 }

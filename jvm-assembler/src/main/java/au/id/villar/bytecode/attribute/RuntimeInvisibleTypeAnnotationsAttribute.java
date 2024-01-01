@@ -6,9 +6,9 @@ import java.util.List;
 
 public class RuntimeInvisibleTypeAnnotationsAttribute extends RuntimeTypeAnnotationsAttribute {
 
-	public RuntimeInvisibleTypeAnnotationsAttribute(List<TypeAnnotation> annotations) {
-		super(annotations);
-	}
+    public RuntimeInvisibleTypeAnnotationsAttribute(List<TypeAnnotation> annotations) {
+        super(annotations);
+    }
 
-	RuntimeInvisibleTypeAnnotationsAttribute() {}
+    RuntimeInvisibleTypeAnnotationsAttribute() {}
 }

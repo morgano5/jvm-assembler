@@ -1,22 +1,21 @@
 package au.id.villar.bytecode.attribute;
 
-import au.id.villar.bytecode.parser.constant.Constant;
+import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class SourceDebugExtensionAttribute extends StringAttribute {
 
-	public SourceDebugExtensionAttribute(String value) {
-		super(value);
-	}
+    public SourceDebugExtensionAttribute(String value) {
+        super(value);
+    }
 
-	SourceDebugExtensionAttribute() {
-	}
+    SourceDebugExtensionAttribute() {
+    }
 
-	@Override
-	public void parseBody(int length, BytesReader bytesReader, Map<Integer, Constant> constantPool) throws IOException {
-		value = bytesReader.readUTF8String(length);
-	}
+    @Override
+    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+        value = bytesReader.readUTF8String(length);
+    }
 }

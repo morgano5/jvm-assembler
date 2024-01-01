@@ -1,57 +1,57 @@
 package au.id.villar.bytecode.attribute;
 
-import au.id.villar.bytecode.parser.constant.Constant;
+import au.id.villar.bytecode.parser.constant.ParsingConstant;
+import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class LocalVariableTableAttribute extends ListAttribute<LocalVariableTableAttribute.LocalVariableInfo> {
 
-	public static class LocalVariableInfo {
-		public final int startPc;
-		public final int length;
-		public final String name;
-		public final String descriptor;
-		public final int index;
+    public static class LocalVariableInfo {
+        public final int startPc;
+        public final int length;
+        public final String name;
+        public final String descriptor;
+        public final int index;
 
-		public LocalVariableInfo(int startPc, int length, String name, String descriptor, int index) {
-			this.startPc = startPc;
-			this.length = length;
-			this.name = name;
-			this.descriptor = descriptor;
-			this.index = index;
-		}
+        public LocalVariableInfo(int startPc, int length, String name, String descriptor, int index) {
+            this.startPc = startPc;
+            this.length = length;
+            this.name = name;
+            this.descriptor = descriptor;
+            this.index = index;
+        }
 
-		@Override
-		public String toString() {
-			return "LocalVariableInfo{" +
-					"startPc=" + startPc +
-					", length=" + length +
-					", name='" + name + '\'' +
-					", descriptor='" + descriptor + '\'' +
-					", index=" + index +
-					'}';
-		}
-	}
+        @Override
+        public String toString() {
+            return "LocalVariableInfo{" +
+                    "startPc=" + startPc +
+                    ", length=" + length +
+                    ", name='" + name + '\'' +
+                    ", descriptor='" + descriptor + '\'' +
+                    ", index=" + index +
+                    '}';
+        }
+    }
 
-	public LocalVariableTableAttribute(List<LocalVariableInfo> list) {
-		this.list = Collections.unmodifiableList(new ArrayList<>(list));
-	}
+    public LocalVariableTableAttribute(List<LocalVariableInfo> list) {
+        this.list = Collections.unmodifiableList(new ArrayList<>(list));
+    }
 
-	LocalVariableTableAttribute() {
-	}
+    LocalVariableTableAttribute() {
+    }
 
-	@Override
-	LocalVariableInfo parseElement(BytesReader bytesReader, Map<Integer, Constant> constantPool) throws IOException {
-		return new LocalVariableInfo(bytesReader.readShort(),
-				bytesReader.readShort(),
-				Constant.toString(bytesReader.readShort(), constantPool),
-				Constant.toString(bytesReader.readShort(), constantPool),
-				bytesReader.readShort()
-		);
-	}
+    @Override
+    LocalVariableInfo parseElement(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+        return new LocalVariableInfo(bytesReader.readShort(),
+                bytesReader.readShort(),
+                ParsingConstant.toString(bytesReader.readShort(), constantPool),
+                ParsingConstant.toString(bytesReader.readShort(), constantPool),
+                bytesReader.readShort()
+        );
+    }
 }
