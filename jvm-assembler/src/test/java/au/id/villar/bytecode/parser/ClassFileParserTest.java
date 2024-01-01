@@ -5,7 +5,7 @@ import au.id.villar.bytecode.constant.Constant;
 import au.id.villar.bytecode.parser.constant.ClassParsingConstant;
 import au.id.villar.bytecode.parser.constant.ParsingConstant;
 import au.id.villar.bytecode.parser.constant.Utf8ParsingConstant;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClassFileParserTest {
 
