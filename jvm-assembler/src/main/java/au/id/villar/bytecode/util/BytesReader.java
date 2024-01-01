@@ -95,7 +95,8 @@ public class BytesReader {
 
     private void throwUnexpectedByteIfTrue(byte octect, boolean condition) throws IOException {
         if (condition) {
-            throw new IOException(String.format("Unexpected byte 0x%2X reading a modified-UTF8 string", octect & 0xFF));
+            throw new IOException(
+                    String.format("Unexpected byte 0x%02X reading a modified-UTF8 string", octect & 0xFF));
         }
     }
 }
