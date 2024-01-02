@@ -43,74 +43,109 @@ public class ClassFileParser {
             throw new IOException("Not a stream containing a class file");
         }
 
-        handler.number(bytesReader.readShort(), ClassFileHandler.NumberType.MINOR);
-        handler.number(bytesReader.readShort(), ClassFileHandler.NumberType.MAYOR);
+        boolean keepParsing = readMayorAndMinor();
 
-        readConstantPool();
+        if (keepParsing) {
+            keepParsing = readConstantPool();
+        }
 
-        handler.number(bytesReader.readShort(), ClassFileHandler.NumberType.ACCESS_FLAGS);
-        handler.number(bytesReader.readShort(), ClassFileHandler.NumberType.THIS_INDEX);
-        handler.number(bytesReader.readShort(), ClassFileHandler.NumberType.SUPER_INDEX);
+        if (keepParsing) {
+            keepParsing = readAccessAndClassAndSuper();
+        }
 
-        readInterfaces();
+        if (keepParsing) {
+            keepParsing = readInterfaces();
+        }
 
-        readFields();
+        if (keepParsing) {
+            keepParsing = readFields();
+        }
 
-        readMethods();
+        if (keepParsing) {
+            keepParsing = readMethods();
+        }
 
-        readAttributes();
+        if (keepParsing) {
+            keepParsing = readAttributes();
+        }
 
-        handler.end();
+        if (keepParsing) {
+            handler.end();
+        }
     }
 
-    private void readConstantPool() throws IOException {
+    private boolean readMayorAndMinor() throws IOException {
+        boolean keepParsing = handler.number(bytesReader.readShort(), ClassFileHandler.NumberType.MINOR);
+        if (keepParsing) {
+            keepParsing = handler.number(bytesReader.readShort(), ClassFileHandler.NumberType.MAYOR);
+        }
+        return keepParsing;
+    }
+
+    private boolean readAccessAndClassAndSuper() throws IOException {
+        boolean keepParsing = handler.number(bytesReader.readShort(), ClassFileHandler.NumberType.ACCESS_FLAGS);
+        if (keepParsing) {
+            keepParsing = handler.number(bytesReader.readShort(), ClassFileHandler.NumberType.THIS_INDEX);
+        }
+        if (keepParsing) {
+            keepParsing = handler.number(bytesReader.readShort(), ClassFileHandler.NumberType.SUPER_INDEX);
+        }
+        return keepParsing;
+    }
+
+    private boolean readConstantPool() throws IOException {
         int size = bytesReader.readShort() - 1;
-        handler.number(size, ClassFileHandler.NumberType.CONSTANT_POOL);
+        boolean keepParsing = handler.number(size, ClassFileHandler.NumberType.CONSTANT_POOL);
         int index = 1;
-        while(index <= size) {
+        while(index <= size && keepParsing) {
             ParsingConstant constant = ParsingConstant.readConstant(bytesReader);
-            handler.constant(constant, index++);
+            keepParsing = handler.constant(constant, index++);
             if(constant.getClass() == LongParsingConstant.class || constant.getClass() == DoubleParsingConstant.class) {
                 index++;
             }
         }
+        return keepParsing;
     }
 
-    private void readInterfaces() throws IOException {
+    private boolean readInterfaces() throws IOException {
         int size = bytesReader.readShort();
-        handler.number(size, ClassFileHandler.NumberType.INTERFACES);
-        for(int index = 0; index < size; index++) {
-            handler.interfaceIndex(bytesReader.readShort());
+        boolean keepParsing = handler.number(size, ClassFileHandler.NumberType.INTERFACES);
+        for(int index = 0; index < size && keepParsing; index++) {
+            keepParsing = handler.interfaceIndex(bytesReader.readShort());
         }
+        return keepParsing;
     }
 
-    private void readFields() throws IOException {
+    private boolean readFields() throws IOException {
         int size = bytesReader.readShort();
-        handler.number(size, ClassFileHandler.NumberType.FIELDS);
-        for(int index = 0; index < size; index++) {
-            handler.field(bytesReader.readShort(), bytesReader.readShort(), bytesReader.readShort());
+        boolean keepParsing = handler.number(size, ClassFileHandler.NumberType.FIELDS);
+        for(int index = 0; index < size && keepParsing; index++) {
+            keepParsing = handler.field(bytesReader.readShort(), bytesReader.readShort(), bytesReader.readShort());
             readAttributes();
         }
+        return keepParsing;
     }
 
-    private void readMethods() throws IOException {
+    private boolean readMethods() throws IOException {
         int size = bytesReader.readShort();
-        handler.number(size, ClassFileHandler.NumberType.METHODS);
+        boolean keepParsing = handler.number(size, ClassFileHandler.NumberType.METHODS);
         for(int index = 0; index < size; index++) {
-            handler.method(bytesReader.readShort(), bytesReader.readShort(), bytesReader.readShort());
+            keepParsing = handler.method(bytesReader.readShort(), bytesReader.readShort(), bytesReader.readShort());
             readAttributes();
         }
+        return keepParsing;
     }
 
-    private void readAttributes() throws IOException {
+    private boolean readAttributes() throws IOException {
         int size = bytesReader.readShort();
-        handler.number(size, ClassFileHandler.NumberType.ATTRIBUTES);
-        for(int index = 0; index < size; index++) {
+        boolean keepParsing = handler.number(size, ClassFileHandler.NumberType.ATTRIBUTES);
+        for(int index = 0; index < size && keepParsing; index++) {
             int nameIndex = bytesReader.readShort();
             int infoSize = bytesReader.readInt();
-            handler.attribute(nameIndex, infoSize, attributeInfo.reuse(infoSize, bytecode));
+            keepParsing = handler.attribute(nameIndex, infoSize, attributeInfo.reuse(infoSize, bytecode));
             attributeInfo.consumeRemaining();
         }
+        return keepParsing;
     }
 
 }

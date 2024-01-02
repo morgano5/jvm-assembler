@@ -43,7 +43,6 @@ public abstract class Attribute {
 
     Attribute() {}
 
-
     public abstract void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool)
             throws IOException;
 

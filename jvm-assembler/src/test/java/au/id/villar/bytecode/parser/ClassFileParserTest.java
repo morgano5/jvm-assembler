@@ -25,7 +25,7 @@ public class ClassFileParserTest {
                 private Map<Integer, ParsingConstant> constants;
 
                 @Override
-                public void number(int number, NumberType numberType) {
+                public boolean number(int number, NumberType numberType) {
 
                     ClassParsingConstant classConstant;
                     String className;
@@ -50,38 +50,43 @@ public class ClassFileParserTest {
                             break;
                         case ATTRIBUTES:
                     }
+                    return true;
                 }
 
                 @Override
-                public void constant(ParsingConstant constant, int index) {
+                public boolean constant(ParsingConstant constant, int index) {
                     constants.put(index, constant);
                     System.out.println("CONSTANT (" + index + "): " + constant);
+                    return true;
                 }
 
                 @Override
-                public void interfaceIndex(int constantPoolIndex) {
+                public boolean interfaceIndex(int constantPoolIndex) {
                     ClassParsingConstant classConstant = (ClassParsingConstant)constants.get(constantPoolIndex);
                     String className = ((Utf8ParsingConstant)constants.get(classConstant.getNameIndex())).getValue();
                     System.out.println("INTERFACE: " + className);
+                    return true;
                 }
 
                 @Override
-                public void field(int accessFlags, int nameIndex, int descriptorIndex) {
+                public boolean field(int accessFlags, int nameIndex, int descriptorIndex) {
                     String name = ((Utf8ParsingConstant)constants.get(nameIndex)).getValue();
                     String type = ((Utf8ParsingConstant)constants.get(descriptorIndex)).getValue();
                     System.out.println("FIELD: accessFlags=" + accessFlags + ", name=" + name + ", type=" + type);
+                    return true;
                 }
 
                 @Override
-                public void method(int accessFlags, int nameIndex, int descriptorIndex) {
+                public boolean method(int accessFlags, int nameIndex, int descriptorIndex) {
                     String name = ((Utf8ParsingConstant)constants.get(nameIndex)).getValue();
                     String descriptor = ((Utf8ParsingConstant)constants.get(descriptorIndex)).getValue();
                     System.out.println("METHOD: accessFlags=" + accessFlags + ", name=" + name
                             + ", descriptor=" + descriptor);
+                    return true;
                 }
 
                 @Override
-                public void attribute(int nameIndex, int length, InputStream info) {
+                public boolean attribute(int nameIndex, int length, InputStream info) {
                     byte[] data = new byte[length];
                     try {
                         info.read(data);
@@ -91,6 +96,7 @@ public class ClassFileParserTest {
                     String name = ((Utf8ParsingConstant)constants.get(nameIndex)).getValue();
                     System.out.println("ATTRIBUTE: name=" + name + ", length=" + length
                             + ", data=" + Arrays.toString(data));
+                    return true;
                 }
             });
 

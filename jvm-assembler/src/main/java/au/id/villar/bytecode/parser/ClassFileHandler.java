@@ -21,17 +21,17 @@ public interface ClassFileHandler {
         ATTRIBUTES
     }
 
-    default void number(int number, NumberType numberType) {}
+    default boolean number(int number, NumberType numberType) { return true; }
 
-    default void constant(ParsingConstant constant, int index) {}
+    default boolean constant(ParsingConstant constant, int index) { return true; }
 
-    default void interfaceIndex(int constantPoolIndex) {}
+    default boolean interfaceIndex(int constantPoolIndex) { return true; }
 
-    default void field(int accessFlags, int nameIndex, int descriptorIndex) {}
+    default boolean field(int accessFlags, int nameIndex, int descriptorIndex) { return true; }
 
-    default void method(int accessFlags, int nameIndex, int descriptorIndex) {}
+    default boolean method(int accessFlags, int nameIndex, int descriptorIndex) { return true; }
 
-    default void attribute(int nameIndex, int length, InputStream info) {}
+    default boolean attribute(int nameIndex, int length, InputStream info) { return true; }
 
     default void end() {}
 }

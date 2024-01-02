@@ -41,7 +41,7 @@ class ParserClassFileHandler implements ClassFileHandler {
     BytesReader bytesReader = new BytesReader(null);
 
     @Override
-    public final void number(int number, NumberType numberType) {
+    public final boolean number(int number, NumberType numberType) {
         switch (numberType) {
             case MINOR:
                 aClass.setMinor(number);
@@ -85,20 +85,23 @@ class ParserClassFileHandler implements ClassFileHandler {
                     aClass.setAttributes(new ArrayList<>(number));
                 }
         }
+        return true;
     }
 
     @Override
-    public final void constant(ParsingConstant constant, int index) {
+    public final boolean constant(ParsingConstant constant, int index) {
         constantPool.put(index, constant);
+        return true;
     }
 
     @Override
-    public final void interfaceIndex(int constantPoolIndex) {
+    public final boolean interfaceIndex(int constantPoolIndex) {
         aClass.getInterfaces().add(constantPool.getClassName(constantPoolIndex));
+        return true;
     }
 
     @Override
-    public final void field(final int accessFlags, final int nameIndex, final int descriptorIndex) {
+    public final boolean field(final int accessFlags, final int nameIndex, final int descriptorIndex) {
         AttrCounter attrCounter = new AttrCounter() {
             @Override
             void execute() {
@@ -111,10 +114,11 @@ class ParserClassFileHandler implements ClassFileHandler {
             }
         };
         attrCounters.offerFirst(attrCounter);
+        return true;
     }
 
     @Override
-    public final void method(final int accessFlags, final int nameIndex, final int descriptorIndex) {
+    public final boolean method(final int accessFlags, final int nameIndex, final int descriptorIndex) {
         AttrCounter attrCounter = new AttrCounter() {
             @Override
             void execute() {
@@ -127,10 +131,11 @@ class ParserClassFileHandler implements ClassFileHandler {
             }
         };
         attrCounters.offerFirst(attrCounter);
+        return true;
     }
 
     @Override
-    public final void attribute(int nameIndex, int length, InputStream info) {
+    public final boolean attribute(int nameIndex, int length, InputStream info) {
         AttrCounter attrCounter = attrCounters.peekFirst();
         String name = constantPool.getStringFromUtf8(nameIndex);
         Attribute attribute;
@@ -148,6 +153,7 @@ class ParserClassFileHandler implements ClassFileHandler {
         } else {
             aClass.getAttributes().add(attribute);
         }
+        return true;
     }
 
     @Override
