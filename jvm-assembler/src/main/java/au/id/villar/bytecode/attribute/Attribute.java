@@ -34,7 +34,7 @@ public abstract class Attribute {
             case "AnnotationDefault" -> new AnnotationDefaultAttribute();
             case "BootstrapMethods" -> new BootstrapMethodsAttribute();
             case "MethodParameters" -> new MethodParametersAttribute();
-            default -> new GenericAttribute(name);
+            default -> new GenericAttribute(name); // TODO : should we throw an "Unknown type" instead?
         };
 
         attribute.parseBody(length, bytesReader, constantPool);

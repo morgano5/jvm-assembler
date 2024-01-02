@@ -3,7 +3,6 @@ package au.id.villar.bytecode.parser.constant;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
-import java.util.Map;
 
 public abstract sealed class ParsingConstant
         permits AbstractDynamicParsingConstant,
@@ -20,7 +19,7 @@ public abstract sealed class ParsingConstant
 
         constant = switch (tag) {
             case 1 -> new Utf8ParsingConstant();
-
+            // case 2 -> Not used
             case 3 -> new IntegerParsingConstant();
             case 4 -> new FloatParsingConstant();
             case 5 -> new LongParsingConstant();
@@ -31,8 +30,8 @@ public abstract sealed class ParsingConstant
             case 10 -> new MethodRefParsingConstant();
             case 11 -> new InterfaceMethodRefParsingConstant();
             case 12 -> new NameAndTypeParsingConstant();
-
-
+            // case 13 -> Not used
+            // case 14 -> Not used
             case 15 -> new MethodHandleParsingConstant();
             case 16 -> new MethodTypeParsingConstant();
             case 17 -> new DynamicParsingConstant();
