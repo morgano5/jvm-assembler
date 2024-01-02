@@ -5,6 +5,8 @@ import au.id.villar.bytecode.Class;
 import au.id.villar.bytecode.Field;
 import au.id.villar.bytecode.Method;
 import au.id.villar.bytecode.attribute.Attribute;
+import au.id.villar.bytecode.attribute.AttributeGenerator;
+import au.id.villar.bytecode.attribute.DefaultAttributeGenerator;
 import au.id.villar.bytecode.constant.Constant;
 import au.id.villar.bytecode.parser.constant.Loadable;
 import au.id.villar.bytecode.parser.constant.ParsingConstant;
@@ -24,9 +26,11 @@ class ParserClassFileHandler implements ClassFileHandler {
 
     private ParsingConstantPool constantPool;
     private final Class aClass;
+    private final AttributeGenerator attrGenerator;
 
     public ParserClassFileHandler(Class aClass) {
         this.aClass = aClass;
+        this.attrGenerator = new DefaultAttributeGenerator();
     }
 
     static abstract class AttrCounter {
@@ -140,7 +144,7 @@ class ParserClassFileHandler implements ClassFileHandler {
         String name = constantPool.getStringFromUtf8(nameIndex);
         Attribute attribute;
         try {
-            attribute = Attribute.readAttribute(name, length, bytesReader.reuse(info), constantPool);
+            attribute = Attribute.readAttribute(name, length, bytesReader.reuse(info), constantPool, attrGenerator);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

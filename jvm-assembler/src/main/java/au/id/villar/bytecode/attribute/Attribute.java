@@ -8,42 +8,41 @@ import java.io.IOException;
 public abstract class Attribute {
 
     public static Attribute readAttribute(String name, int length, BytesReader bytesReader,
-            ParsingConstantPool constantPool) throws IOException {
+            ParsingConstantPool constantPool, AttributeGenerator generator) throws IOException {
 
-        Attribute attribute = switch (name) {
-            case "Code" -> new CodeAttribute();
-            case "ConstantValue" -> new ConstantValueAttribute();
-            case "Signature" -> new SignatureAttribute();
-            case "SourceFile" -> new SourceFileAttribute();
-            case "Synthetic" -> new SyntheticAttribute();
-            case "Deprecated" -> new DeprecatedAttribute();
-            case "Exceptions" -> new ExceptionsAttribute();
-            case "RuntimeVisibleAnnotations" -> new RuntimeVisibleAnnotationsAttribute();
-            case "RuntimeInvisibleAnnotations" -> new RuntimeInvisibleAnnotationsAttribute();
-            case "RuntimeVisibleParameterAnnotations" -> new RuntimeVisibleParameterAnnotationsAttribute();
-            case "RuntimeInvisibleParameterAnnotations" -> new RuntimeInvisibleParameterAnnotationsAttribute();
-            case "RuntimeVisibleTypeAnnotations" -> new RuntimeVisibleTypeAnnotationsAttribute();
-            case "RuntimeInvisibleTypeAnnotations" -> new RuntimeInvisibleTypeAnnotationsAttribute();
-            case "StackMapTable" -> new StackMapTableAttribute();
-            case "InnerClasses" -> new InnerClassesAttribute();
-            case "EnclosingMethod" -> new EnclosingMethodAttribute();
-            case "SourceDebugExtension" -> new SourceDebugExtensionAttribute();
-            case "LineNumberTable" -> new LineNumberTableAttribute();
-            case "LocalVariableTable" -> new LocalVariableTableAttribute();
-            case "LocalVariableTypeTable" -> new LocalVariableTypeTableAttribute();
-            case "AnnotationDefault" -> new AnnotationDefaultAttribute();
-            case "BootstrapMethods" -> new BootstrapMethodsAttribute();
-            case "MethodParameters" -> new MethodParametersAttribute();
-            default -> new GenericAttribute(name); // TODO : should we throw an "Unknown type" instead?
+        Class<? extends Attribute> attributeClass = switch (name) {
+            case "Code" -> CodeAttribute.class;
+            case "ConstantValue" -> ConstantValueAttribute.class;
+            case "Signature" -> SignatureAttribute.class;
+            case "SourceFile" -> SourceFileAttribute.class;
+            case "Synthetic" -> SyntheticAttribute.class;
+            case "Deprecated" -> DeprecatedAttribute.class;
+            case "Exceptions" -> ExceptionsAttribute.class;
+            case "RuntimeVisibleAnnotations" -> RuntimeVisibleAnnotationsAttribute.class;
+            case "RuntimeInvisibleAnnotations" -> RuntimeInvisibleAnnotationsAttribute.class;
+            case "RuntimeVisibleParameterAnnotations" -> RuntimeVisibleParameterAnnotationsAttribute.class;
+            case "RuntimeInvisibleParameterAnnotations" -> RuntimeInvisibleParameterAnnotationsAttribute.class;
+            case "RuntimeVisibleTypeAnnotations" -> RuntimeVisibleTypeAnnotationsAttribute.class;
+            case "RuntimeInvisibleTypeAnnotations" -> RuntimeInvisibleTypeAnnotationsAttribute.class;
+            case "StackMapTable" -> StackMapTableAttribute.class;
+            case "InnerClasses" -> InnerClassesAttribute.class;
+            case "EnclosingMethod" -> EnclosingMethodAttribute.class;
+            case "SourceDebugExtension" -> SourceDebugExtensionAttribute.class;
+            case "LineNumberTable" -> LineNumberTableAttribute.class;
+            case "LocalVariableTable" -> LocalVariableTableAttribute.class;
+            case "LocalVariableTypeTable" -> LocalVariableTypeTableAttribute.class;
+            case "AnnotationDefault" -> AnnotationDefaultAttribute.class;
+            case "BootstrapMethods" -> BootstrapMethodsAttribute.class;
+            case "MethodParameters" -> MethodParametersAttribute.class;
+            default -> throw new IllegalStateException("Unknown attribute type: " + name);
         };
 
-        attribute.parseBody(length, bytesReader, constantPool);
-        return attribute;
+        return generator.readAttribute(attributeClass, length, bytesReader, constantPool, generator);
     }
 
     Attribute() {}
 
-    public abstract void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool)
-            throws IOException;
+    public abstract void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
+            AttributeGenerator generator) throws IOException;
 
 }

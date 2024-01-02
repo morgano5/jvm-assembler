@@ -8,7 +8,8 @@ import java.io.IOException;
 class EmptyAttribute extends Attribute {
 
     @Override
-    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
+            AttributeGenerator generator) throws IOException {
         // DO nothing
     }
 

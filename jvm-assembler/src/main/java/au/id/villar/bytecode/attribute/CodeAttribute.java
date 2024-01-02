@@ -77,7 +77,8 @@ public class CodeAttribute extends Attribute {
     }
 
     @Override
-    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
+            AttributeGenerator generator) throws IOException {
         maxStack = bytesReader.readShort();
         maxLocals = bytesReader.readShort();
         int codeLength = bytesReader.readInt();
@@ -94,7 +95,7 @@ public class CodeAttribute extends Attribute {
         List<Attribute> attributes = new ArrayList<>(numAttributes);
         for(int count = 0; count < numAttributes; count++) {
             String name = constantPool.getStringFromUtf8(bytesReader.readShort());
-            attributes.add(Attribute.readAttribute(name, bytesReader.readInt(), bytesReader, constantPool));
+            attributes.add(Attribute.readAttribute(name, bytesReader.readInt(), bytesReader, constantPool, generator));
         }
         this.attributes = Collections.unmodifiableList(attributes);
     }

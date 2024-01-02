@@ -15,7 +15,8 @@ abstract class PoolConstantStringAttribute extends StringAttribute {
 	PoolConstantStringAttribute() {}
 
 	@Override
-	public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+	public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
+			AttributeGenerator generator) throws IOException {
 		value = ParsingConstant.toString(bytesReader.readShort(), constantPool);
 	}
 

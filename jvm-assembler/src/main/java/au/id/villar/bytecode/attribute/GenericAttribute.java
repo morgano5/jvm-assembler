@@ -30,7 +30,8 @@ public class GenericAttribute extends Attribute {
     }
 
     @Override
-    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
+            AttributeGenerator generator) throws IOException {
         if(length > 0) {
             data = new byte[length];
             bytesReader.readMinimum(data, length);

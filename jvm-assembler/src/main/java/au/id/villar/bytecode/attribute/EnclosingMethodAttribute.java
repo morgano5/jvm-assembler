@@ -6,7 +6,6 @@ import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class EnclosingMethodAttribute extends Attribute {
 
@@ -23,7 +22,8 @@ public class EnclosingMethodAttribute extends Attribute {
     }
 
     @Override
-    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
+            AttributeGenerator generator) throws IOException {
         String className = ParsingConstant.toString(bytesReader.readShort(), constantPool);
         NameAndTypeParsingConstant methodInfo = (NameAndTypeParsingConstant)constantPool.get(bytesReader.readShort());
         String methodName = ParsingConstant.toString(methodInfo.getNameIndex(), constantPool);
