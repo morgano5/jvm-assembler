@@ -11,4 +11,21 @@ public final class IntegerConstant extends Constant {
     public int getValue() {
         return value;
     }
+
+    @Override
+    public boolean isLoadable() {
+        return true;
+    }
+
+    @Override
+    public String toAssemblyDefinition(String identifier) {
+        return String.format("d_int %s %d", identifier, value);
+    }
+
+    @Override
+    public String toString() {
+        return "IntegerConstant{" +
+                "value=" + value +
+                '}';
+    }
 }

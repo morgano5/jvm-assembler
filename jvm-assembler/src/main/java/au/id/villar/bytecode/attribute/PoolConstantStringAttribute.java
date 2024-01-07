@@ -8,16 +8,16 @@ import java.io.IOException;
 
 abstract class PoolConstantStringAttribute extends StringAttribute {
 
-	PoolConstantStringAttribute(String value) {
-		super(value);
-	}
+    PoolConstantStringAttribute(String value) {
+        super(value);
+    }
 
-	PoolConstantStringAttribute() {}
+    PoolConstantStringAttribute() {}
 
-	@Override
-	public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
-			AttributeGenerator generator) throws IOException {
-		value = ParsingConstant.toString(bytesReader.readShort(), constantPool);
-	}
+    @Override
+    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
+            AttributeGenerator generator) throws IOException {
+        value = ParsingConstant.toString(bytesReader.readShort(), constantPool);
+    }
 
 }

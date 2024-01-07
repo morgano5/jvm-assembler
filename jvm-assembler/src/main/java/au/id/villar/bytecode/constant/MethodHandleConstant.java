@@ -40,4 +40,26 @@ public final class MethodHandleConstant extends Constant {
     public String getDescriptor() {
         return descriptor;
     }
+
+    @Override
+    public boolean isLoadable() {
+        return true;
+    }
+
+    @Override
+    public String toAssemblyDefinition(String identifier) {
+        return String.format("d_methodhandler %s %s %s \"%s\" \"%s\" \"%s\"", identifier, kind, memberType, memberName,
+                getDescriptor(), getClassName());
+    }
+
+    @Override
+    public String toString() {
+        return "MethodHandleConstant{" +
+                "kind=" + kind +
+                ", memberType=" + memberType +
+                ", className='" + className + '\'' +
+                ", memberName='" + memberName + '\'' +
+                ", descriptor='" + descriptor + '\'' +
+                '}';
+    }
 }

@@ -8,7 +8,7 @@ import au.id.villar.bytecode.util.BytesReader;
 import java.io.IOException;
 import java.util.List;
 
-public final class MethodHandleParsingConstant extends ParsingConstant implements Loadable<MethodHandleConstant> {
+public final class MethodHandleParsingConstant extends ParsingConstant implements RuntimeParsingConstant<MethodHandleConstant> {
 
     private MethodHandleReferenceKind referenceKind;
     private int referenceIndex;
@@ -44,7 +44,7 @@ public final class MethodHandleParsingConstant extends ParsingConstant implement
     @Override
     public MethodHandleConstant toConstant(ParsingConstantPool constantPool, List<Attribute> attributes, int mayor) {
 
-        MemberRefParsingConstant refConstant = constantPool.get(referenceIndex, MemberRefParsingConstant.class);
+        MemberRefParsingConstant<?> refConstant = constantPool.get(referenceIndex, MemberRefParsingConstant.class);
         NameAndTypeParsingConstant nameTypeConstant = constantPool.get(refConstant.getNameAndTypeIndex(),
                 NameAndTypeParsingConstant.class);
         String className = constantPool.getClassName(refConstant.getClassIndex());

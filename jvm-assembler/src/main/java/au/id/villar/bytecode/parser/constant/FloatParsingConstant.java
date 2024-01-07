@@ -7,7 +7,7 @@ import au.id.villar.bytecode.util.BytesReader;
 import java.io.IOException;
 import java.util.List;
 
-public final class FloatParsingConstant extends ValueParsingConstant implements Loadable<FloatConstant> {
+public final class FloatParsingConstant extends ValueParsingConstant implements RuntimeParsingConstant<FloatConstant> {
 
     private float value;
 

@@ -8,7 +8,7 @@ import au.id.villar.bytecode.attribute.Attribute;
 import au.id.villar.bytecode.attribute.AttributeGenerator;
 import au.id.villar.bytecode.attribute.DefaultAttributeGenerator;
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.parser.constant.Loadable;
+import au.id.villar.bytecode.parser.constant.RuntimeParsingConstant;
 import au.id.villar.bytecode.parser.constant.ParsingConstant;
 import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
@@ -165,7 +165,7 @@ class ParserClassFileHandler implements ClassFileHandler {
         final Map<Integer, Constant> constants = new HashMap<>();
         for (Integer index : constantPool.getIndexes()) {
             ParsingConstant constant = constantPool.get(index);
-            if (constant instanceof Loadable<?> loadable) {
+            if (constant instanceof RuntimeParsingConstant<?> loadable) {
                 constants.put(index, loadable.toConstant(constantPool, aClass.getAttributes(), aClass.getMayor()));
             }
         }

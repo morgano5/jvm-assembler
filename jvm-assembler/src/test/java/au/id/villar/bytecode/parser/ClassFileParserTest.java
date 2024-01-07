@@ -1,6 +1,7 @@
 package au.id.villar.bytecode.parser;
 
 import au.id.villar.bytecode.Class;
+import au.id.villar.bytecode.attribute.CodeAttribute;
 import au.id.villar.bytecode.constant.Constant;
 import au.id.villar.bytecode.parser.constant.ClassParsingConstant;
 import au.id.villar.bytecode.parser.constant.ParsingConstant;
@@ -19,7 +20,7 @@ public class ClassFileParserTest {
 
     @Test
     public void basicTest() throws IOException {
-        try(InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/BlockScope.class")) {
+        try (InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/BlockScope.class")) {
             ClassFileParser.parse(bytecode, new ClassFileHandler() {
 
                 private Map<Integer, ParsingConstant> constants;
@@ -107,7 +108,7 @@ public class ClassFileParserTest {
 
     @Test
     public void softBasicTest() throws IOException {
-        try(InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/AnnotatableTypeSystem.class")) {
+        try (InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/AnnotatableTypeSystem.class")) {
             Class aClass = ClassFileParser.parseToClass(bytecode);
             assertEquals("org/eclipse/jdt/internal/compiler/lookup/AnnotatableTypeSystem", aClass.getName());
             assertEquals("org/eclipse/jdt/internal/compiler/lookup/TypeSystem", aClass.getSuperClass());

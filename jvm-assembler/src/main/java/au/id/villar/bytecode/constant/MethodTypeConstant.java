@@ -11,4 +11,21 @@ public final class MethodTypeConstant extends Constant {
     public String getValue() {
         return value;
     }
+
+    @Override
+    public boolean isLoadable() {
+        return true;
+    }
+
+    @Override
+    public String toAssemblyDefinition(String identifier) {
+        return String.format("d_methodtype %s \"%s\"", identifier, value);
+    }
+
+    @Override
+    public String toString() {
+        return "MethodTypeConstant{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

@@ -11,4 +11,21 @@ public final class DoubleConstant extends Constant {
     public double getValue() {
         return value;
     }
+
+    @Override
+    public boolean isLoadable() {
+        return true;
+    }
+
+    @Override
+    public String toAssemblyDefinition(String identifier) {
+        return String.format("d_double %s %e", identifier, value);
+    }
+
+    @Override
+    public String toString() {
+        return "DoubleConstant{" +
+                "value=" + value +
+                '}';
+    }
 }

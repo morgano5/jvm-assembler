@@ -116,10 +116,37 @@ public class AccessFlags {
         return method && hasFlag(flags, ACC_MANDATED);
     }
 
+    public String toAssembly(java.lang.Class<?> type) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("access");
+        if(isPublic()) builder.append(" public");
+        if(isPrivate()) builder.append(" private");
+        if(isProtected()) builder.append(" protected");
+        if(isStatic()) builder.append(" static");
+        if(isFinal()) builder.append(" final");
+        if(isSuper()) builder.append(" super");
+        if(isVolatile()) builder.append(" volatile");
+        if(isTransient()) builder.append(" transient");
+        if(isNative()) builder.append(" Native");
+        if(isInterface()) builder.append(" interface");
+        if(isAbstract()) builder.append(" abstract");
+        if(isStrict()) builder.append(" strict");
+        if(isSynthetic()) builder.append(" synthetic");
+        if(isAnnotation()) builder.append(" annotation");
+        if(isEnum()) builder.append(" enum");
+        if(isModule()) builder.append(" module");
+        if(isSynchronized()) builder.append(" synchronized");
+        if(isBridge()) builder.append(" bridge");
+        if(isVargars()) builder.append(" vargars");
+        if(isMandated()) builder.append(" mandated");
+        return builder.toString();
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("AccessFlags{");
+        if(isPublic()) builder.append(" Public");
         if(isPrivate()) builder.append(" Private");
         if(isProtected()) builder.append(" Protected");
         if(isStatic()) builder.append(" Static");

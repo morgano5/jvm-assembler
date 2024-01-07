@@ -5,7 +5,7 @@ import au.id.villar.bytecode.constant.ClassConstant;
 
 import java.util.List;
 
-public final class ClassParsingConstant extends IndexToUtf8ParsingConstant implements Loadable<ClassConstant> {
+public final class ClassParsingConstant extends IndexToUtf8ParsingConstant implements RuntimeParsingConstant<ClassConstant> {
 
     public ClassParsingConstant(int nameIndex) {
         super(nameIndex);

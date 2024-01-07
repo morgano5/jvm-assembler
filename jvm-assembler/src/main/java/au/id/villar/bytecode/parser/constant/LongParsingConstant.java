@@ -7,7 +7,7 @@ import au.id.villar.bytecode.util.BytesReader;
 import java.io.IOException;
 import java.util.List;
 
-public final class LongParsingConstant extends ValueParsingConstant implements Loadable<LongConstant> {
+public final class LongParsingConstant extends ValueParsingConstant implements RuntimeParsingConstant<LongConstant> {
 
     private long value;
 

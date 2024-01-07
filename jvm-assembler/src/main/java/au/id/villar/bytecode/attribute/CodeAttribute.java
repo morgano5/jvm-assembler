@@ -3,7 +3,9 @@ package au.id.villar.bytecode.attribute;
 import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -64,8 +66,8 @@ public class CodeAttribute extends Attribute {
         return code.length;
     }
 
-    public void readCode(byte[] buffer, int bufferOffset, int codeOffset, int length) {
-        System.arraycopy(code, codeOffset, buffer, bufferOffset, length);
+    public InputStream createCodeStream() {
+        return new ByteArrayInputStream(code);
     }
 
     public List<ExceptionInfo> getExceptionTable() {

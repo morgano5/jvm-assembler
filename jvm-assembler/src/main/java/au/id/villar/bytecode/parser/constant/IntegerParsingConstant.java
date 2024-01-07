@@ -7,7 +7,7 @@ import au.id.villar.bytecode.util.BytesReader;
 import java.io.IOException;
 import java.util.List;
 
-public final class IntegerParsingConstant extends ValueParsingConstant implements Loadable<IntegerConstant> {
+public final class IntegerParsingConstant extends ValueParsingConstant implements RuntimeParsingConstant<IntegerConstant> {
 
     private int value;
 

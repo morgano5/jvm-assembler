@@ -7,7 +7,7 @@ import java.util.List;
 
 public final class MethodTypeParsingConstant
         extends IndexToUtf8ParsingConstant
-        implements Loadable<MethodTypeConstant> {
+        implements RuntimeParsingConstant<MethodTypeConstant> {
 
     public MethodTypeParsingConstant(int descriptorIndex) {
         super(descriptorIndex);

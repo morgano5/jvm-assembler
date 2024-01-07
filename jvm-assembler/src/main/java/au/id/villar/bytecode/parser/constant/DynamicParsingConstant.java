@@ -5,7 +5,7 @@ import au.id.villar.bytecode.constant.DynamicConstant;
 
 import java.util.List;
 
-public final class DynamicParsingConstant extends AbstractDynamicParsingConstant implements Loadable<DynamicConstant> {
+public final class DynamicParsingConstant extends AbstractDynamicParsingConstant implements RuntimeParsingConstant<DynamicConstant> {
 
     public DynamicParsingConstant(int bootstrapMethodAttrIndex, int nameAndTypeIndex) {
         super(bootstrapMethodAttrIndex, nameAndTypeIndex);

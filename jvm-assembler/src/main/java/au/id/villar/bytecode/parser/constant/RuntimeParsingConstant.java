@@ -5,7 +5,7 @@ import au.id.villar.bytecode.constant.Constant;
 
 import java.util.List;
 
-public interface Loadable<T extends Constant> {
+public interface RuntimeParsingConstant<T extends Constant> {
 
     T toConstant(ParsingConstantPool constantPool, List<Attribute> attributes, int mayor);
 

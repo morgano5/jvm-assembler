@@ -11,4 +11,21 @@ public final class ClassConstant extends Constant {
     public String getValue() {
         return value;
     }
+
+    @Override
+    public boolean isLoadable() {
+        return true;
+    }
+
+    @Override
+    public String toAssemblyDefinition(String identifier) {
+        return String.format("d_class %s \"%s\"", identifier, value);
+    }
+
+    @Override
+    public String toString() {
+        return "ClassConstant{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }
