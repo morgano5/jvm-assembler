@@ -31,7 +31,7 @@ public class AccessFlags {
 
     private static final java.lang.Class<Class> classType = Class.class;
     private static final java.lang.Class<Field> fieldType = Field.class;
-    private static final java.lang.Class<Member> methodType = Member.class;
+    private static final java.lang.Class<Method> methodType = Method.class;
     private static final java.lang.Class<InnerClassesAttribute> innerClassesType = InnerClassesAttribute.class;
     private static final java.lang.Class<MethodParametersAttribute> methodParametersType
             = MethodParametersAttribute.class;
