@@ -41,8 +41,8 @@ public class Disassembler {
     }
 
     private void writeClassData(Class aClass, Writer writer) throws IOException {
-        writer.write(String.format("class \"%s\"%n", aClass.getName()));
-        writer.write(String.format("    %s%n", aClass.getAccessFlags().toAssembly(Class.class)));
+        writer.write(String.format("CLASS \"%s\"%n", aClass.getName()));
+        writer.write(String.format("    %s%n", aClass.getAccessFlags().toAssembly()));
         if (!aClass.getSuperClass().equals("java/lang/Object")) {
             writer.write(String.format("    super \"%s\"%n", aClass.getSuperClass()));
         }
@@ -53,7 +53,7 @@ public class Disassembler {
     }
 
     private static void writeConstantSection(Map<Integer, Constant> constants, Writer writer) throws IOException {
-        writer.write(String.format("constants%n"));
+        writer.write(String.format("CONSTANTS%n"));
 
         List<String> definitions = constants.entrySet().stream()
                 .sorted(Comparator.comparingInt(Map.Entry::getKey))
@@ -66,14 +66,14 @@ public class Disassembler {
     }
 
     private void writeField(Field field, Writer writer) throws IOException {
-        writer.write(String.format("%nfield \"%s\"%n", field.getName()));
-        writer.write(String.format("    %s%n", field.getAccessFlags().toAssembly(Field.class)));
+        writer.write(String.format("%nFIELD \"%s\"%n", field.getName()));
+        writer.write(String.format("    %s%n", field.getAccessFlags().toAssembly()));
         writer.write(String.format("    descriptor \"%s\"%n", field.getDescriptor()));
     }
 
     private void writeMethod(Method method, Writer writer) throws IOException {
-        writer.write(String.format("%nmethod \"%s\"%n", method.getName()));
-        writer.write(String.format("    %s%n", method.getAccessFlags().toAssembly(Field.class)));
+        writer.write(String.format("%nMETHOD \"%s\"%n", method.getName()));
+        writer.write(String.format("    %s%n", method.getAccessFlags().toAssembly()));
         writer.write(String.format("    descriptor \"%s\"%n", method.getDescriptor()));
 
         for (Attribute attribute : method.getAttributes()) {
@@ -102,7 +102,7 @@ public class Disassembler {
 
                 @Override
                 public void operationLookupswitch(int offset, int opcode, int defaultOffset, int numPairs,
-                        Iterator<Map.Entry<Integer, Integer>> offsets) throws IOException {
+                        Iterator<Map.Entry<Integer, Integer>> offsets) {
                     setLabel(offset + defaultOffset);
                     while (offsets.hasNext()) {
                         setLabel(offset + offsets.next().getValue());

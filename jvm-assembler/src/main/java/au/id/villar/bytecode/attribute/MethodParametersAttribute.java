@@ -40,6 +40,6 @@ public class MethodParametersAttribute extends ListAttribute<MethodParametersAtt
     @Override
     ParameterInfo parseElement(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
         return new ParameterInfo(ParsingConstant.toString(bytesReader.readShort(), constantPool),
-                new AccessFlags((short)bytesReader.readShort(), false));
+                new AccessFlags((short)bytesReader.readShort(), MethodParametersAttribute.class));
     }
 }

@@ -57,7 +57,7 @@ class ParserClassFileHandler implements ClassFileHandler {
                 constantPool = new ParsingConstantPool(number);
                 break;
             case ACCESS_FLAGS:
-                aClass.setAccessFlags(new AccessFlags((short) number, false));
+                aClass.setAccessFlags(new AccessFlags((short) number, Class.class));
                 break;
             case THIS_INDEX:
                 aClass.setName(constantPool.getClassName(number));
@@ -110,7 +110,7 @@ class ParserClassFileHandler implements ClassFileHandler {
             @Override
             void execute() {
                 aClass.getFields().add(new Field(
-                        new AccessFlags((short) accessFlags, false),
+                        new AccessFlags((short) accessFlags, Field.class),
                         constantPool.getStringFromUtf8(nameIndex),
                         constantPool.getStringFromUtf8(descriptorIndex),
                         attrs
@@ -127,7 +127,7 @@ class ParserClassFileHandler implements ClassFileHandler {
             @Override
             void execute() {
                 aClass.getMethods().add(new Method(
-                        new AccessFlags((short) accessFlags, true),
+                        new AccessFlags((short) accessFlags, Method.class),
                         constantPool.getStringFromUtf8(nameIndex),
                         constantPool.getStringFromUtf8(descriptorIndex),
                         attrs

@@ -1,6 +1,7 @@
 package au.id.villar.bytecode.attribute;
 
 import au.id.villar.bytecode.AccessFlags;
+import au.id.villar.bytecode.Class;
 import au.id.villar.bytecode.parser.constant.ParsingConstant;
 import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
@@ -47,7 +48,7 @@ public class InnerClassesAttribute extends ListAttribute<InnerClassesAttribute.C
         int innerIndex = bytesReader.readShort();
         int outerIndex = bytesReader.readShort();
         int nameIndex = bytesReader.readShort();
-        AccessFlags flags = new AccessFlags((short)bytesReader.readShort(), false);
+        AccessFlags flags = new AccessFlags((short)bytesReader.readShort(), InnerClassesAttribute.class);
         String innerClass = innerIndex != 0? ParsingConstant.toString(innerIndex, constantPool): null;
         String outerClass = outerIndex != 0? ParsingConstant.toString(outerIndex, constantPool): null;
         String nameClass = nameIndex != 0? ParsingConstant.toString(nameIndex, constantPool): null;
