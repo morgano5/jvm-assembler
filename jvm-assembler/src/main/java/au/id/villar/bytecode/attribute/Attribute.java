@@ -34,10 +34,12 @@ public abstract class Attribute {
             case "AnnotationDefault" -> AnnotationDefaultAttribute.class;
             case "BootstrapMethods" -> BootstrapMethodsAttribute.class;
             case "MethodParameters" -> MethodParametersAttribute.class;
-            default -> throw new IllegalStateException("Unknown attribute type: " + name);
+            default -> GenericAttribute.class;
         };
 
-        return generator.readAttribute(attributeClass, length, bytesReader, constantPool, generator);
+        return attributeClass == GenericAttribute.class
+                ? generator.readGenericAttribute(name, length, bytesReader, constantPool, generator)
+                : generator.readAttribute(attributeClass, length, bytesReader, constantPool, generator);
     }
 
     Attribute() {}

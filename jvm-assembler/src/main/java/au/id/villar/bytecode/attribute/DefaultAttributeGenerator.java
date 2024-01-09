@@ -60,10 +60,17 @@ public class DefaultAttributeGenerator implements AttributeGenerator {
             attribute = new MethodParametersAttribute();
         } else {
             throw new IllegalStateException("Unknown attribute type: " + type.getName());
-        };
+        }
 
         attribute.parseBody(length, bytesReader, constantPool, generator);
         return type.cast(attribute);
     }
 
+    @Override
+    public GenericAttribute readGenericAttribute(String name, int length, BytesReader bytesReader,
+            ParsingConstantPool constantPool, AttributeGenerator generator) throws IOException {
+        GenericAttribute attribute = new GenericAttribute(name);
+        attribute.parseBody(length, bytesReader, constantPool, generator);
+        return attribute;
+    }
 }

@@ -10,4 +10,6 @@ public interface AttributeGenerator {
     <T extends Attribute> T readAttribute(Class<T> type, int length, BytesReader bytesReader,
         ParsingConstantPool constantPool, AttributeGenerator generator) throws IOException;
 
+    GenericAttribute readGenericAttribute(String name, int length, BytesReader bytesReader,
+        ParsingConstantPool constantPool, AttributeGenerator generator) throws IOException;
 }
