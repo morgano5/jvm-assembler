@@ -1,8 +1,12 @@
 package au.id.villar.bytecode.constant;
 
-public final class FloatConstant extends Constant {
+import au.id.villar.bytecode.util.BytesReader;
 
-    private final float value;
+import java.io.IOException;
+
+public final class FloatConstant extends ValueConstant {
+
+    private float value;
 
     public FloatConstant(float value) {
         this.value = value;
@@ -12,20 +16,20 @@ public final class FloatConstant extends Constant {
         return value;
     }
 
+    FloatConstant() {}
+
     @Override
-    public boolean isLoadable() {
-        return true;
+    void parseBody(BytesReader bytesReader) throws IOException {
+        value = bytesReader.readFloat();
     }
 
     @Override
-    public String toAssemblyDefinition(String identifier) {
-        return String.format("d_float %s %e", identifier, value);
+    public String toStringValue() {
+        return String.valueOf(getValue());
     }
 
     @Override
     public String toString() {
-        return "FloatConstant{" +
-                "value=" + value +
-                '}';
+        return "FloatConstant{" + value + '}';
     }
 }

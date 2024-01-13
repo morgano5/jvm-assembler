@@ -1,11 +1,9 @@
 package au.id.villar.bytecode.parser;
 
 import au.id.villar.bytecode.Class;
-import au.id.villar.bytecode.attribute.CodeAttribute;
+import au.id.villar.bytecode.constant.ClassConstant;
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.parser.constant.ClassParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
-import au.id.villar.bytecode.parser.constant.Utf8ParsingConstant;
+import au.id.villar.bytecode.constant.Utf8Constant;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -19,16 +17,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ClassFileParserTest {
 
     @Test
+    void shouldParseWithNopLoader() throws IOException {
+        try (InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/BlockScope.class")) {
+            ClassFileParser.parse(bytecode, new ClassFileHandler() { /* Do nothing */ });
+        }
+    }
+
+//======================================
+    @Test
     public void basicTest() throws IOException {
         try (InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/BlockScope.class")) {
             ClassFileParser.parse(bytecode, new ClassFileHandler() {
 
-                private Map<Integer, ParsingConstant> constants;
+                private Map<Integer, Constant> constants;
 
                 @Override
                 public boolean number(int number, NumberType numberType) {
 
-                    ClassParsingConstant classConstant;
+                    ClassConstant classConstant;
                     String className;
 
                     switch(numberType) {
@@ -37,13 +43,13 @@ public class ClassFileParserTest {
                             System.out.println("CONSTANT POOL SIZE: " + number);
                             break;
                         case THIS_INDEX:
-                            classConstant = (ClassParsingConstant)constants.get(number);
-                            className = ((Utf8ParsingConstant)constants.get(classConstant.getNameIndex())).getValue();
+                            classConstant = (ClassConstant)constants.get(number);
+                            className = ((Utf8Constant)constants.get(classConstant.getNameIndex())).getValue();
                             System.out.println("THIS: " + className);
                             break;
                         case SUPER_INDEX:
-                            classConstant = (ClassParsingConstant)constants.get(number);
-                            className = ((Utf8ParsingConstant)constants.get(classConstant.getNameIndex())).getValue();
+                            classConstant = (ClassConstant)constants.get(number);
+                            className = ((Utf8Constant)constants.get(classConstant.getNameIndex())).getValue();
                             System.out.println("SUPER: " + className);
                             break;
                         case ACCESS_FLAGS:
@@ -55,7 +61,7 @@ public class ClassFileParserTest {
                 }
 
                 @Override
-                public boolean constant(ParsingConstant constant, int index) {
+                public boolean constant(Constant constant, int index) {
                     constants.put(index, constant);
                     System.out.println("CONSTANT (" + index + "): " + constant);
                     return true;
@@ -63,24 +69,24 @@ public class ClassFileParserTest {
 
                 @Override
                 public boolean interfaceIndex(int constantPoolIndex) {
-                    ClassParsingConstant classConstant = (ClassParsingConstant)constants.get(constantPoolIndex);
-                    String className = ((Utf8ParsingConstant)constants.get(classConstant.getNameIndex())).getValue();
+                    ClassConstant classConstant = (ClassConstant)constants.get(constantPoolIndex);
+                    String className = ((Utf8Constant)constants.get(classConstant.getNameIndex())).getValue();
                     System.out.println("INTERFACE: " + className);
                     return true;
                 }
 
                 @Override
                 public boolean field(int accessFlags, int nameIndex, int descriptorIndex) {
-                    String name = ((Utf8ParsingConstant)constants.get(nameIndex)).getValue();
-                    String type = ((Utf8ParsingConstant)constants.get(descriptorIndex)).getValue();
+                    String name = ((Utf8Constant)constants.get(nameIndex)).getValue();
+                    String type = ((Utf8Constant)constants.get(descriptorIndex)).getValue();
                     System.out.println("FIELD: accessFlags=" + accessFlags + ", name=" + name + ", type=" + type);
                     return true;
                 }
 
                 @Override
                 public boolean method(int accessFlags, int nameIndex, int descriptorIndex) {
-                    String name = ((Utf8ParsingConstant)constants.get(nameIndex)).getValue();
-                    String descriptor = ((Utf8ParsingConstant)constants.get(descriptorIndex)).getValue();
+                    String name = ((Utf8Constant)constants.get(nameIndex)).getValue();
+                    String descriptor = ((Utf8Constant)constants.get(descriptorIndex)).getValue();
                     System.out.println("METHOD: accessFlags=" + accessFlags + ", name=" + name
                             + ", descriptor=" + descriptor);
                     return true;
@@ -94,7 +100,7 @@ public class ClassFileParserTest {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    String name = ((Utf8ParsingConstant)constants.get(nameIndex)).getValue();
+                    String name = ((Utf8Constant)constants.get(nameIndex)).getValue();
                     System.out.println("ATTRIBUTE: name=" + name + ", length=" + length
                             + ", data=" + Arrays.toString(data));
                     return true;
@@ -115,10 +121,10 @@ public class ClassFileParserTest {
             assertEquals(50, aClass.getMayor());
 
 
-            System.out.println(">>> " + aClass.getConstants().size());
-            java.util.Map<Integer, Constant> constants = aClass.getConstants();
-            for (java.util.Map.Entry<Integer, Constant> entry : constants.entrySet()) {
-                System.out.format(">> %3d: %s%n", entry.getKey(), entry.getValue().toString());
+            System.out.println(">>> " + aClass.getConstants().getIndexes().size());
+            for (Integer index : aClass.getConstants().getIndexes()) {
+                Constant constant = aClass.getConstants().get(index);
+                System.out.format(">> %3d: %s%n", index, constant.toString());
             }
         }
 

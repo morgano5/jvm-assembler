@@ -1,15 +1,13 @@
 package au.id.villar.bytecode.attribute;
 
 import au.id.villar.bytecode.attribute.annotation.TypeAnnotation;
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 abstract class RuntimeTypeAnnotationsAttribute extends ListAttribute<TypeAnnotation> {
 

@@ -1,12 +1,12 @@
-package au.id.villar.bytecode.parser.constant;
+package au.id.villar.bytecode.constant;
 
-public final class InvokeDynamicParsingConstant extends AbstractDynamicParsingConstant {
+public final class InvokeDynamicConstant extends AbstractDynamicConstant {
 
-    public InvokeDynamicParsingConstant(int bootstrapMethodAttrIndex, int nameAndTypeIndex) {
+    public InvokeDynamicConstant(int bootstrapMethodAttrIndex, int nameAndTypeIndex) {
         super(bootstrapMethodAttrIndex, nameAndTypeIndex);
     }
 
-    InvokeDynamicParsingConstant() {}
+    InvokeDynamicConstant() {}
 
     @Override
     public String toString() {

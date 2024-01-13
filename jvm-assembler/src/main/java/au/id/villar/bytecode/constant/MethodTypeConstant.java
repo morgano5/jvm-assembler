@@ -1,31 +1,20 @@
 package au.id.villar.bytecode.constant;
 
-public final class MethodTypeConstant extends Constant {
+public final class MethodTypeConstant
+        extends IndexToUtf8Constant {
 
-    private final String value;
-
-    public MethodTypeConstant(String value) {
-        this.value = value;
+    public MethodTypeConstant(int descriptorIndex) {
+        super(descriptorIndex);
     }
 
-    public String getValue() {
-        return value;
+    public int getDescriptorIndex() {
+        return utf8Index;
     }
 
-    @Override
-    public boolean isLoadable() {
-        return true;
-    }
-
-    @Override
-    public String toAssemblyDefinition(String identifier) {
-        return String.format("d_methodtype %s \"%s\"", identifier, value);
-    }
+    MethodTypeConstant() {}
 
     @Override
     public String toString() {
-        return "MethodTypeConstant{" +
-                "value='" + value + '\'' +
-                '}';
+        return "MethodTypeConstant{" + utf8Index + '}';
     }
 }

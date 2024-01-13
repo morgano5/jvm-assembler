@@ -1,30 +1,38 @@
 package au.id.villar.bytecode.constant;
 
+import au.id.villar.bytecode.util.BytesReader;
+
+import java.io.IOException;
+
 public abstract sealed class MemberRefConstant
         extends Constant
-        permits FieldRefConstant, MethodRefConstant, InterfaceMethodRefConstant {
+        permits FieldRefConstant, InterfaceMethodRefConstant, MethodRefConstant {
 
-    private final String className;
-    private final String descriptor;
-    protected final String memberName;
+    protected int classIndex;
+    protected int nameAndTypeIndex;
 
-    protected MemberRefConstant(String className, String memberName, String descriptor) {
-        this.className = className;
-        this.memberName = memberName;
-        this.descriptor = descriptor;
+    MemberRefConstant(int classIndex, int nameAndTypeIndex) {
+        this.classIndex = classIndex;
+        this.nameAndTypeIndex = nameAndTypeIndex;
     }
 
-    public String getClassName() {
-        return className;
+    public int getClassIndex() {
+        return classIndex;
     }
 
-    public String getDescriptor() {
-        return descriptor;
+    public int getNameAndTypeIndex() {
+        return nameAndTypeIndex;
+    }
+
+    MemberRefConstant() {}
+
+    @Override
+    void parseBody(BytesReader bytesReader) throws IOException {
+        classIndex = bytesReader.readShort();
+        nameAndTypeIndex = bytesReader.readShort();
     }
 
     @Override
-    public boolean isLoadable() {
-        return false;
-    }
+    public abstract String toString();
 
 }

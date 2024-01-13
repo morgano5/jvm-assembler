@@ -1,17 +1,35 @@
 package au.id.villar.bytecode.assembly;
 
+import au.id.villar.bytecode.AccessFlags;
 import au.id.villar.bytecode.Class;
 import au.id.villar.bytecode.Field;
 import au.id.villar.bytecode.Method;
 import au.id.villar.bytecode.attribute.Attribute;
 import au.id.villar.bytecode.attribute.CodeAttribute;
-import au.id.villar.bytecode.constant.Constant;
 import au.id.villar.bytecode.parser.CodeHandler;
 import au.id.villar.bytecode.parser.CodeParser;
+import au.id.villar.bytecode.constant.ClassConstant;
+import au.id.villar.bytecode.constant.DoubleConstant;
+import au.id.villar.bytecode.constant.DynamicConstant;
+import au.id.villar.bytecode.constant.FieldRefConstant;
+import au.id.villar.bytecode.constant.FloatConstant;
+import au.id.villar.bytecode.constant.IntegerConstant;
+import au.id.villar.bytecode.constant.InterfaceMethodRefConstant;
+import au.id.villar.bytecode.constant.InvokeDynamicConstant;
+import au.id.villar.bytecode.constant.LongConstant;
+import au.id.villar.bytecode.constant.MethodHandleConstant;
+import au.id.villar.bytecode.constant.MethodRefConstant;
+import au.id.villar.bytecode.constant.MethodTypeConstant;
+import au.id.villar.bytecode.constant.ModuleConstant;
+import au.id.villar.bytecode.constant.NameAndTypeConstant;
+import au.id.villar.bytecode.constant.PackageConstant;
+import au.id.villar.bytecode.constant.Constant;
+import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.StringConstant;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -21,71 +39,80 @@ import java.util.Map;
 
 public class Disassembler {
 
-    public String toAssembly(Class aClass) throws IOException {
+    private static final String INDENTATION = "    ";
+    private static final String OBJECT_CLASS_NAME = "java/lang/Object";
 
-        Writer writer = new StringWriter();
+    private final Class aClass;
+    private final Writer writer;
 
-        writeClassData(aClass, writer);
-
-        writeConstantSection(aClass.getConstants(), writer);
-
-        for (Field field : aClass.getFields()) {
-            writeField(field, writer);
-        }
-
-        for (Method method : aClass.getMethods()) {
-            writeMethod(method, writer);
-        }
-
-        return writer.toString();
+    private Disassembler(Class aClass, Writer writer) {
+        this.aClass = aClass;
+        this.writer = writer;
     }
 
-    private void writeClassData(Class aClass, Writer writer) throws IOException {
-        writer.write(String.format("CLASS \"%s\"%n", aClass.getName()));
-        writer.write(String.format("    %s%n", aClass.getAccessFlags().toAssembly()));
-        if (!aClass.getSuperClass().equals("java/lang/Object")) {
-            writer.write(String.format("    super \"%s\"%n", aClass.getSuperClass()));
+    public static void toAssembly(Class aClass, Writer writer) throws IOException {
+        Disassembler disassembler = new Disassembler(aClass, writer);
+        disassembler.toAssembly();
+    }
+
+    private void toAssembly() throws IOException {
+
+        try {
+            writeClassData(aClass);
+
+            for (Field field : aClass.getFields()) {
+                writeField(field);
+            }
+
+            for (Method method : aClass.getMethods()) {
+                writeMethod(method, aClass.getConstants());
+            }
+        } catch (UncheckedIOException e) {
+            throw e.getCause();
+        }
+
+    }
+
+    private void writeClassData(Class aClass) {
+        write("CLASS \"%s\"%n", aClass.getName());
+        write("%s.version %d %d%n", INDENTATION, aClass.getMayor(), aClass.getMinor());
+        write("%s.access", INDENTATION);
+        writeFlags(aClass.getAccessFlags());
+        write("%n");
+        if (!OBJECT_CLASS_NAME.equals(aClass.getSuperClass())) {
+            write("%s.super \"%s\"%n", INDENTATION, aClass.getSuperClass());
         }
         for (String iface : aClass.getInterfaces()) {
-            writer.write(String.format("    implements \"%s\"%n",iface));
-        }
-        writer.write(String.format("    version %d %d%n", aClass.getMayor(), aClass.getMinor()));
-    }
-
-    private static void writeConstantSection(Map<Integer, Constant> constants, Writer writer) throws IOException {
-        writer.write(String.format("CONSTANTS%n"));
-
-        List<String> definitions = constants.entrySet().stream()
-                .sorted(Comparator.comparingInt(Map.Entry::getKey))
-                .map(entry -> entry.getValue().toAssemblyDefinition(String.format("c%05d", entry.getKey())))
-                .toList();
-
-        for (String definition : definitions) {
-            writer.write(String.format("    %s%n", definition));
+            write("%s.implements \"%s\"%n", INDENTATION, iface);
         }
     }
 
-    private void writeField(Field field, Writer writer) throws IOException {
-        writer.write(String.format("%nFIELD \"%s\"%n", field.getName()));
-        writer.write(String.format("    %s%n", field.getAccessFlags().toAssembly()));
-        writer.write(String.format("    descriptor \"%s\"%n", field.getDescriptor()));
+    private void writeField(Field field) {
+        write("%nFIELD \"%s\"%n", field.getName());
+        write("%s.access", INDENTATION);
+        writeFlags(field.getAccessFlags());
+        write("%n");
+        write("%s.descriptor \"%s\"%n", INDENTATION, field.getDescriptor());
     }
 
-    private void writeMethod(Method method, Writer writer) throws IOException {
-        writer.write(String.format("%nMETHOD \"%s\"%n", method.getName()));
-        writer.write(String.format("    %s%n", method.getAccessFlags().toAssembly()));
-        writer.write(String.format("    descriptor \"%s\"%n", method.getDescriptor()));
+    private void writeMethod(Method method, ParsingConstantPool constants) throws IOException {
+        write("%nMETHOD \"%s\"%n", method.getName());
+        write("%s.access", INDENTATION);
+        writeFlags(method.getAccessFlags());
+        write("%n");
+        write("%s.descriptor \"%s\"%n", INDENTATION, method.getDescriptor());
 
         for (Attribute attribute : method.getAttributes()) {
             if (attribute instanceof CodeAttribute codeAttribute) {
-                Map<Integer, String> labels = calculateBranchLabels(codeAttribute);
-                writeAssembly(codeAttribute, writer, labels);
+                ConstantsAndLabels constantsAndLabels = calculateBranchLabelsAndConstants(codeAttribute, constants);
+                writeAssembly(codeAttribute, constantsAndLabels);
             }
         }
     }
 
-    private Map<Integer, String> calculateBranchLabels(CodeAttribute codeAttribute) throws IOException {
-        final Map<Integer, String> tags = new HashMap<>();
+    private ConstantsAndLabels calculateBranchLabelsAndConstants(CodeAttribute codeAttribute,
+            ParsingConstantPool constants) throws IOException {
+        final ConstantsAndLabels constantsAndLabels = new ConstantsAndLabels(new HashMap<>(), new HashMap<>());
         try (InputStream codeStream = codeAttribute.createCodeStream()) {
             CodeParser.parse(codeStream, codeAttribute.getCodeLength(), new CodeHandler() {
 
@@ -119,150 +146,277 @@ public class Disassembler {
                     setLabel(offset + branchingOffset);
                 }
 
+                @Override
+                public void operationConstantPoolIndex(int offset, int opcode, int poolIndex) {
+                    registerConstant(poolIndex);
+                };
+
+                @Override
+                public void operationMultiANewArray(int offset, int opcode, int poolIndex, int dimensions) {
+                    registerConstant(poolIndex);
+                };
+
+                @Override
+                public void operationInvokeDynamic(int offset, int opcode, int poolIndex) {
+                    registerConstant(poolIndex);
+                };
+
+                @Override
+                public void operationInvokeInterface(int offset, int opcode, int poolIndex, int count) {
+                    registerConstant(poolIndex);
+                };
+
+                private void registerConstant(int constantIndex) {
+                    constantsAndLabels.constants.computeIfAbsent(constantIndex, constants::get);
+                }
+
                 private void setLabel(int offset) {
-                    if (!tags.containsKey(offset)) {
-                        tags.put(offset, "LABEL_" + (tagNumber++));
-                    }
+                    constantsAndLabels.labels.computeIfAbsent(offset, o -> "LABEL_" + (tagNumber++));
                 }
             });
         }
-        return tags;
+        return constantsAndLabels;
     }
 
-    private void writeAssembly(CodeAttribute codeAttribute, Writer writer, Map<Integer, String> labels)
+    private void writeAssembly(CodeAttribute codeAttribute, ConstantsAndLabels constantsAndLabels)
             throws IOException {
-        writer.write("\n    code\n");
+
+        Map<Integer, Constant> constants = constantsAndLabels.constants;
+        Map<Integer, String> labels = constantsAndLabels.labels;
+        List<Map.Entry<Integer, Constant>> constantEntries = constants.entrySet().stream()
+                .sorted(Comparator.comparingInt(Map.Entry::getKey))
+                .toList();
+
+        write("%n%s.constants%n", INDENTATION);
+        for (Map.Entry<Integer, Constant> constantEntry : constantEntries) {
+            write("%s", INDENTATION);
+            writeConstant(constantEntry.getKey(), constantEntry.getValue());
+            write("%n");
+        }
+        write("%n%s.code%n", INDENTATION);
         try (InputStream codeStream = codeAttribute.createCodeStream()) {
             CodeParser.parse(codeStream, codeAttribute.getCodeLength(), new CodeHandler() {
 
-                private static final String INDENTATION = "    ";
-
                 @Override
-                public void operation(int offset, int opcode) throws IOException {
+                public void operation(int offset, int opcode) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format("%n"));
+                    write("%n");
                 }
 
                 @Override
-                public void operationImmediateByte(int offset, int opcode, byte operand) throws IOException {
+                public void operationImmediateByte(int offset, int opcode, byte operand) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format(" %d%n", operand));
+                    write(" %d%n", operand);
                 }
 
                 @Override
-                public void operationSignedShortOperand(int offset, int opcode, short operand) throws IOException {
+                public void operationSignedShortOperand(int offset, int opcode, short operand) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format(" %d%n", operand));
+                    write(" %d%n", operand);
                 }
 
                 @Override
-                public void operationConstantPoolIndex(int offset, int opcode, int poolIndex) throws IOException {
+                public void operationConstantPoolIndex(int offset, int opcode, int poolIndex) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format(" #c%05d%n", poolIndex));
+                    write(" #c%d%n", poolIndex);
                 }
 
                 @Override
-                public void operationByteIndex(int offset, int opcode, int index) throws IOException {
+                public void operationByteIndex(int offset, int opcode, int index) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format(" %d%n", index));
+                    write(" %d%n", index);
                 }
 
                 @Override
-                public void operationArrayType(int offset, int opcode, ArrayType arrayType) throws IOException {
+                public void operationArrayType(int offset, int opcode, ArrayType arrayType) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format(" %s%n", arrayType.name()));
+                    write(" %s%n", arrayType.name());
                 }
 
                 @Override
-                public void operationIntIncrement(int offset, int opcode, int index, int value) throws IOException {
+                public void operationIntIncrement(int offset, int opcode, int index, int value) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format(" %d %d%n", index, value));
+                    write(" %d %d%n", index, value);
                 }
 
                 @Override
                 public void operationTableswitch(int offset, int opcode, int defaultOffset, int low, int high,
-                        Iterator<Integer> offsets) throws IOException {
+                        Iterator<Integer> offsets) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format("%n"));
+                    write("%n");
                     while (offsets.hasNext()) {
                         String label = labels.getOrDefault(offset + offsets.next(), "[ERROR: Label Not Found]");
-                        writer.write(String.format("%s    %d, %s%n", INDENTATION, low++, label));
+                        write("%s    %d, %s%n", INDENTATION, low++, label);
                     }
-                    writer.write(String.format("%send%n", INDENTATION));
+                    write("%send%n", INDENTATION);
                 }
 
                 @Override
                 public void operationLookupswitch(int offset, int opcode, int defaultOffset, int numPairs,
-                        Iterator<Map.Entry<Integer, Integer>> offsets) throws IOException {
+                        Iterator<Map.Entry<Integer, Integer>> offsets) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format("%n"));
+                    write("%n");
                     while (offsets.hasNext()) {
                         Map.Entry<Integer, Integer> next = offsets.next();
                         String label = labels.getOrDefault(offset + next.getValue(), "[ERROR: Label Not Found]");
-                        writer.write(String.format("%s    %d, %s%n", INDENTATION, next.getKey(), label));
+                        write("%s    %d, %s%n", INDENTATION, next.getKey(), label);
                     }
-                    writer.write(String.format("%send%n", INDENTATION));
+                    write("%send%n", INDENTATION);
                 }
 
                 @Override
-                public void operationWideByteIndex(int offset, int opcode, int index) throws IOException {
+                public void operationWideByteIndex(int offset, int opcode, int index) {
                     labelAndIndentation(true, offset, opcode);
-                    writer.write(String.format(" %d%n", index));
+                    write(" %d%n", index);
                 }
 
                 @Override
-                public void operationWideIntIncrement(int offset, int opcode, int index, int value) throws IOException {
+                public void operationWideIntIncrement(int offset, int opcode, int index, int value) {
                     labelAndIndentation(true, offset, opcode);
-                    writer.write(String.format(" %d %d%n", index, value));
+                    write(" %d %d%n", index, value);
                 }
 
                 @Override
-                public void operationMultiANewArray(int offset, int opcode, int poolIndex, int dimensions)
-                        throws IOException {
+                public void operationMultiANewArray(int offset, int opcode, int poolIndex, int dimensions) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format(" #c%05d %d%n", poolIndex, dimensions));
+                    write(" #c%d %d%n", poolIndex, dimensions);
                 }
 
                 @Override
-                public void operationBranching(int offset, int opcode, short branchingOffset) throws IOException {
+                public void operationBranching(int offset, int opcode, short branchingOffset) {
                     labelAndIndentation(false, offset, opcode);
                     String label = labels.getOrDefault(offset + branchingOffset, "[ERROR: Label Not Found]");
-                    writer.write(String.format(" %s%n", label));
+                    write(" %s%n", label);
                 }
 
                 @Override
-                public void operationLongBranching(int offset, int opcode, int branchingOffset) throws IOException {
+                public void operationLongBranching(int offset, int opcode, int branchingOffset) {
                     labelAndIndentation(false, offset, opcode);
                     String label = labels.getOrDefault(offset + branchingOffset, "[ERROR: Label Not Found]");
-                    writer.write(String.format(" %s%n", label));
+                    write(" %s%n", label);
                 }
 
                 @Override
-                public void operationInvokeDynamic(int offset, int opcode, int poolIndex) throws IOException {
+                public void operationInvokeDynamic(int offset, int opcode, int poolIndex) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format(" #c%05d%n", poolIndex));
+                    write(" #c%d%n", poolIndex);
                 }
 
                 @Override
-                public void operationInvokeInterface(int offset, int opcode, int poolIndex, int count)
-                        throws IOException {
+                public void operationInvokeInterface(int offset, int opcode, int poolIndex, int count) {
                     labelAndIndentation(false, offset, opcode);
-                    writer.write(String.format(" #c%05d %d%n", poolIndex, count));
+                    write(" #c%d %d%n", poolIndex, count);
                 }
 
-                private void labelAndIndentation(boolean wide, int offset, int opcode) throws IOException {
+                private void labelAndIndentation(boolean wide, int offset, int opcode) {
                     String label = labels.get(offset);
                     if (label != null) {
-                        writer.write(String.format("%s:%n", label));
+                        write("%s:%n", label);
                     }
-                    writer.write(INDENTATION);
+                    write(INDENTATION);
                     if (wide) {
-                        writer.write("wide ");
+                        write("wide ");
                     }
-                    writer.write(String.format("%s", toMnemonic(opcode)));
+                    write("%s", toMnemonic(opcode));
                 }
             });
         }
+    }
+
+    private void writeConstant(Integer index, Constant constant) {
+        ParsingConstantPool constantPool = aClass.getConstants();
+        if (constant instanceof IntegerConstant c) {
+            write("d_int c%d %d", index, c.getValue());
+        } else if (constant instanceof LongConstant c) {
+            write("d_long c%d %d", index, c.getValue());
+        } else if (constant instanceof FloatConstant c) {
+            write("d_float c%d %f", index, c.getValue());
+        } else if (constant instanceof DoubleConstant c) {
+            write("d_double c%d %f", index, c.getValue());
+        } else if (constant instanceof StringConstant c) {
+            write("d_string c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getStringIndex()));
+        } else if (constant instanceof ClassConstant c) {
+            write("d_class c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getNameIndex()));
+        } else if (constant instanceof PackageConstant c) {
+            write("d_package c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getNameIndex()));
+        } else if (constant instanceof ModuleConstant c) {
+            write("d_module c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getNameIndex()));
+        } else if (constant instanceof MethodTypeConstant c) {
+            write("d_method_type c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getDescriptorIndex()));
+        } else if (constant instanceof FieldRefConstant c) {
+            NameAndTypeConstant nameAndType = constantPool
+                    .get(c.getNameAndTypeIndex(), NameAndTypeConstant.class);
+            String className = constantPool.getClassName(c.getClassIndex());
+            String name = constantPool.getStringFromUtf8(nameAndType.getNameIndex());
+            String descriptor = constantPool.getStringFromUtf8(nameAndType.getDescriptorIndex());
+            write("d_field c%d \"%s\" \"%s\" \"%s\"", index, name, descriptor, className);
+        } else if (constant instanceof MethodRefConstant c) {
+            NameAndTypeConstant nameAndType = constantPool
+                    .get(c.getNameAndTypeIndex(), NameAndTypeConstant.class);
+            String className = constantPool.getClassName(c.getClassIndex());
+            String name = constantPool.getStringFromUtf8(nameAndType.getNameIndex());
+            String descriptor = constantPool.getStringFromUtf8(nameAndType.getDescriptorIndex());
+            write("d_method c%d \"%s\" \"%s\" \"%s\"", index, name, descriptor, className);
+        } else if (constant instanceof InterfaceMethodRefConstant c) {
+            NameAndTypeConstant nameAndType = constantPool
+                    .get(c.getNameAndTypeIndex(), NameAndTypeConstant.class);
+            String className = constantPool.getClassName(c.getClassIndex());
+            String name = constantPool.getStringFromUtf8(nameAndType.getNameIndex());
+            String descriptor = constantPool.getStringFromUtf8(nameAndType.getDescriptorIndex());
+            write("d_imethod c%d \"%s\" \"%s\" \"%s\"", index, name, descriptor, className);
+        } else if (constant instanceof MethodHandleConstant c) {
+            write("d_method_handle c%d", index); // TODO implement this if needed or remove it
+        } else if (constant instanceof DynamicConstant c) {
+            write("d_dynamic c%d", index); // TODO implement this if needed or remove it
+        } else if (constant instanceof InvokeDynamicConstant c) {
+            write("d_invoke_dynamic c%d PENDING", index); // TODO implement this if needed or remove it
+        } else {
+            throw new IllegalArgumentException("Unknown constant type: " + constant.getClass().getName());
+        }
+    }
+
+    public String utf8ConstantWithEscapedChars(Integer utf8Index) {
+        String string = aClass.getConstants().getStringFromUtf8(utf8Index);
+        StringBuilder formatted = new StringBuilder(string);
+        replace(formatted, "\\", "\\\\");
+        replace(formatted, "\b", "\\b");
+        replace(formatted, "\t", "\\t");
+        replace(formatted, "\n", "\\n");
+        replace(formatted, "\f", "\\f");
+        replace(formatted, "\r", "\\r");
+        replace(formatted, "\"", "\\\"");
+        return formatted.toString();
+    }
+
+    private void replace(StringBuilder text, String oldText, String newText) {
+        int fromIndex = 0;
+        while ((fromIndex = text.indexOf(oldText, fromIndex)) >= 0) {
+            text.replace(fromIndex, oldText.length() + fromIndex, newText);
+            fromIndex += newText.length();
+        }
+    }
+
+    private void writeFlags(AccessFlags flags) {
+        if(flags.isPublic()) write(" public");
+        if(flags.isPrivate()) write(" private");
+        if(flags.isProtected()) write(" protected");
+        if(flags.isStatic()) write(" static");
+        if(flags.isFinal()) write(" final");
+        if(flags.isSuper()) write(" super");
+        if(flags.isVolatile()) write(" volatile");
+        if(flags.isTransient()) write(" transient");
+        if(flags.isNative()) write(" Native");
+        if(flags.isInterface()) write(" interface");
+        if(flags.isAbstract()) write(" abstract");
+        if(flags.isStrict()) write(" strict");
+        if(flags.isSynthetic()) write(" synthetic");
+        if(flags.isAnnotation()) write(" annotation");
+        if(flags.isEnum()) write(" enum");
+        if(flags.isModule()) write(" module");
+        if(flags.isSynchronized()) write(" synchronized");
+        if(flags.isBridge()) write(" bridge");
+        if(flags.isVargars()) write(" vargars");
+        if(flags.isMandated()) write(" mandated");
     }
 
     private String toMnemonic(int opCode) {
@@ -478,4 +632,14 @@ public class Disassembler {
             default -> throw new IllegalStateException("Unknown opcode: " + opCode);
         };
     }
+
+    private void write(String format, Object ... args) {
+        try {
+            writer.write(String.format(format, args));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private record ConstantsAndLabels(Map<Integer, Constant> constants, Map<Integer, String> labels) {}
 }

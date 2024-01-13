@@ -1,15 +1,15 @@
-package au.id.villar.bytecode.parser.constant;
+package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
 
-public final class NameAndTypeParsingConstant extends ParsingConstant {
+public final class NameAndTypeConstant extends Constant {
 
     private int nameIndex;
     private int descriptorIndex;
 
-    public NameAndTypeParsingConstant(int nameIndex, int descriptorIndex) {
+    public NameAndTypeConstant(int nameIndex, int descriptorIndex) {
         this.nameIndex = nameIndex;
         this.descriptorIndex = descriptorIndex;
     }
@@ -22,7 +22,7 @@ public final class NameAndTypeParsingConstant extends ParsingConstant {
         return descriptorIndex;
     }
 
-    NameAndTypeParsingConstant() {}
+    NameAndTypeConstant() {}
 
     @Override
     void parseBody(BytesReader bytesReader) throws IOException {

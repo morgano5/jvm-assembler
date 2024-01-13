@@ -1,15 +1,14 @@
 package au.id.villar.bytecode.attribute.annotation;
 
 //import au.id.villar.bytecode.attribute.annotation.target.Target;
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.Constant;
+import au.id.villar.bytecode.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class TypeAnnotation extends Annotation {
 
@@ -56,7 +55,7 @@ public class TypeAnnotation extends Annotation {
         for(int count = 0; count < typePathSize; count++) {
             typePathList.add(new TypePath(bytesReader.readByte(), bytesReader.readByte()));
         }
-        String type = ParsingConstant.toString(bytesReader.readShort(), constantPool);
+        String type = Constant.toString(bytesReader.readShort(), constantPool);
         int numElementValuePairs = bytesReader.readShort();
         List<ElementValuePair> list = new ArrayList<>(numElementValuePairs);
         for(int count = 0; count < numElementValuePairs; count++) {

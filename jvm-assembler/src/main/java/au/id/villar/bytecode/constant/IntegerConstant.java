@@ -1,8 +1,12 @@
 package au.id.villar.bytecode.constant;
 
-public final class IntegerConstant extends Constant {
+import au.id.villar.bytecode.util.BytesReader;
 
-    private final int value;
+import java.io.IOException;
+
+public final class IntegerConstant extends ValueConstant {
+
+    private int value;
 
     public IntegerConstant(int value) {
         this.value = value;
@@ -12,20 +16,20 @@ public final class IntegerConstant extends Constant {
         return value;
     }
 
+    IntegerConstant() {}
+
     @Override
-    public boolean isLoadable() {
-        return true;
+    void parseBody(BytesReader bytesReader) throws IOException {
+        value = bytesReader.readInt();
     }
 
     @Override
-    public String toAssemblyDefinition(String identifier) {
-        return String.format("d_int %s %d", identifier, value);
+    public String toStringValue() {
+        return String.valueOf(getValue());
     }
 
     @Override
     public String toString() {
-        return "IntegerConstant{" +
-                "value=" + value +
-                '}';
+        return "IntegerConstant{" + value + '}';
     }
 }

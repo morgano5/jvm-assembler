@@ -1,9 +1,9 @@
 package au.id.villar.bytecode.parser;
 
 import au.id.villar.bytecode.Class;
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
-import au.id.villar.bytecode.parser.constant.DoubleParsingConstant;
-import au.id.villar.bytecode.parser.constant.LongParsingConstant;
+import au.id.villar.bytecode.constant.Constant;
+import au.id.villar.bytecode.constant.DoubleConstant;
+import au.id.villar.bytecode.constant.LongConstant;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -98,9 +98,9 @@ public class ClassFileParser {
         boolean keepParsing = handler.number(size, ClassFileHandler.NumberType.CONSTANT_POOL);
         int index = 1;
         while(index <= size && keepParsing) {
-            ParsingConstant constant = ParsingConstant.readConstant(bytesReader);
+            Constant constant = Constant.readConstant(bytesReader);
             keepParsing = handler.constant(constant, index++);
-            if(constant.getClass() == LongParsingConstant.class || constant.getClass() == DoubleParsingConstant.class) {
+            if(constant.getClass() == LongConstant.class || constant.getClass() == DoubleConstant.class) {
                 index++;
             }
         }
@@ -121,7 +121,9 @@ public class ClassFileParser {
         boolean keepParsing = handler.number(size, ClassFileHandler.NumberType.FIELDS);
         for(int index = 0; index < size && keepParsing; index++) {
             keepParsing = handler.field(bytesReader.readShort(), bytesReader.readShort(), bytesReader.readShort());
-            readAttributes();
+            if (keepParsing) {
+                readAttributes();
+            }
         }
         return keepParsing;
     }
@@ -129,9 +131,11 @@ public class ClassFileParser {
     private boolean readMethods() throws IOException {
         int size = bytesReader.readShort();
         boolean keepParsing = handler.number(size, ClassFileHandler.NumberType.METHODS);
-        for(int index = 0; index < size; index++) {
+        for(int index = 0; index < size && keepParsing; index++) {
             keepParsing = handler.method(bytesReader.readShort(), bytesReader.readShort(), bytesReader.readShort());
-            readAttributes();
+            if (keepParsing) {
+                readAttributes();
+            }
         }
         return keepParsing;
     }
@@ -143,7 +147,9 @@ public class ClassFileParser {
             int nameIndex = bytesReader.readShort();
             int infoSize = bytesReader.readInt();
             keepParsing = handler.attribute(nameIndex, infoSize, attributeInfo.reuse(infoSize, bytecode));
-            attributeInfo.consumeRemaining();
+            if (keepParsing) {
+                attributeInfo.consumeRemaining();
+            }
         }
         return keepParsing;
     }

@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.parser;
 
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
+import au.id.villar.bytecode.constant.Constant;
 
 import java.io.InputStream;
 
@@ -23,7 +23,7 @@ public interface ClassFileHandler {
 
     default boolean number(int number, NumberType numberType) { return true; }
 
-    default boolean constant(ParsingConstant constant, int index) { return true; }
+    default boolean constant(Constant constant, int index) { return true; }
 
     default boolean interfaceIndex(int constantPoolIndex) { return true; }
 

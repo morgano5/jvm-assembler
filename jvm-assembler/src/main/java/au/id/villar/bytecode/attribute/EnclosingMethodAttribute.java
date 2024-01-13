@@ -1,8 +1,8 @@
 package au.id.villar.bytecode.attribute;
 
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
-import au.id.villar.bytecode.parser.constant.NameAndTypeParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.Constant;
+import au.id.villar.bytecode.constant.NameAndTypeConstant;
+import au.id.villar.bytecode.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -24,10 +24,10 @@ public class EnclosingMethodAttribute extends Attribute {
     @Override
     public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
             AttributeGenerator generator) throws IOException {
-        String className = ParsingConstant.toString(bytesReader.readShort(), constantPool);
-        NameAndTypeParsingConstant methodInfo = (NameAndTypeParsingConstant)constantPool.get(bytesReader.readShort());
-        String methodName = ParsingConstant.toString(methodInfo.getNameIndex(), constantPool);
-        String methodDescriptor = ParsingConstant.toString(methodInfo.getDescriptorIndex(), constantPool);
+        String className = Constant.toString(bytesReader.readShort(), constantPool);
+        NameAndTypeConstant methodInfo = (NameAndTypeConstant)constantPool.get(bytesReader.readShort());
+        String methodName = Constant.toString(methodInfo.getNameIndex(), constantPool);
+        String methodDescriptor = Constant.toString(methodInfo.getDescriptorIndex(), constantPool);
         method = new MemberReference(MemberReference.Type.METHOD, className, methodName, methodDescriptor);
     }
 

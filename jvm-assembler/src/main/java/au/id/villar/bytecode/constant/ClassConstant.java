@@ -1,31 +1,19 @@
 package au.id.villar.bytecode.constant;
 
-public final class ClassConstant extends Constant {
+public final class ClassConstant extends IndexToUtf8Constant {
 
-    private final String value;
-
-    public ClassConstant(String value) {
-        this.value = value;
+    public ClassConstant(int nameIndex) {
+        super(nameIndex);
     }
 
-    public String getValue() {
-        return value;
+    public int getNameIndex() {
+        return utf8Index;
     }
 
-    @Override
-    public boolean isLoadable() {
-        return true;
-    }
-
-    @Override
-    public String toAssemblyDefinition(String identifier) {
-        return String.format("d_class %s \"%s\"", identifier, value);
-    }
+    ClassConstant() {}
 
     @Override
     public String toString() {
-        return "ClassConstant{" +
-                "value='" + value + '\'' +
-                '}';
+        return "ClassConstant{" + utf8Index + '}';
     }
 }

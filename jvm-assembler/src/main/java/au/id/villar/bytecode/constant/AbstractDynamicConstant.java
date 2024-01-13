@@ -1,17 +1,17 @@
-package au.id.villar.bytecode.parser.constant;
+package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
 
-public abstract sealed class AbstractDynamicParsingConstant
-        extends ParsingConstant
-        permits InvokeDynamicParsingConstant, DynamicParsingConstant {
+public abstract sealed class AbstractDynamicConstant
+        extends Constant
+        permits InvokeDynamicConstant, DynamicConstant {
 
     protected int bootstrapMethodAttrIndex;
     protected int nameAndTypeIndex;
 
-    public AbstractDynamicParsingConstant(int bootstrapMethodAttrIndex, int nameAndTypeIndex) {
+    public AbstractDynamicConstant(int bootstrapMethodAttrIndex, int nameAndTypeIndex) {
         this.bootstrapMethodAttrIndex = bootstrapMethodAttrIndex;
         this.nameAndTypeIndex = nameAndTypeIndex;
     }
@@ -24,7 +24,7 @@ public abstract sealed class AbstractDynamicParsingConstant
         return nameAndTypeIndex;
     }
 
-    AbstractDynamicParsingConstant() {}
+    AbstractDynamicConstant() {}
 
     @Override
     void parseBody(BytesReader bytesReader) throws IOException {

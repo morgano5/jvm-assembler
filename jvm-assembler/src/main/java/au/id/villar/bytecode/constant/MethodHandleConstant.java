@@ -1,65 +1,47 @@
 package au.id.villar.bytecode.constant;
 
+import au.id.villar.bytecode.util.BytesReader;
+
+import java.io.IOException;
+
 public final class MethodHandleConstant extends Constant {
 
-    public enum MemberType {
-        FIELD, METHOD, INTERFACE_METHOD
+    private MethodHandleReferenceKind referenceKind;
+    private int referenceIndex;
+
+    public MethodHandleConstant(MethodHandleReferenceKind referenceKind, int referenceIndex) {
+        this.referenceKind = referenceKind;
+        this.referenceIndex = referenceIndex;
     }
 
-    private final MethodHandleReferenceKind kind;
-    private final MemberType memberType;
-    private final String className;
-    private final String memberName;
-    private final String descriptor;
-
-    public MethodHandleConstant(MethodHandleReferenceKind kind, MemberType memberType, String className,
-            String memberName, String descriptor) {
-        this.kind = kind;
-        this.memberType = memberType;
-        this.className = className;
-        this.memberName = memberName;
-        this.descriptor = descriptor;
+    public MethodHandleReferenceKind getReferenceKind() {
+        return referenceKind;
     }
 
-    public MethodHandleReferenceKind getKind() {
-        return kind;
+    public int getReferenceIndex() {
+        return referenceIndex;
     }
 
-    public MemberType getMemberType() {
-        return memberType;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public String getMemberName() {
-        return memberName;
-    }
-
-    public String getDescriptor() {
-        return descriptor;
-    }
+    MethodHandleConstant() {}
 
     @Override
-    public boolean isLoadable() {
-        return true;
-    }
-
-    @Override
-    public String toAssemblyDefinition(String identifier) {
-        return String.format("d_methodhandler %s %s %s \"%s\" \"%s\" \"%s\"", identifier, kind, memberType, memberName,
-                getDescriptor(), getClassName());
+    void parseBody(BytesReader bytesReader) throws IOException {
+        int kind = bytesReader.readByte();
+        referenceIndex = bytesReader.readShort();
+        for(MethodHandleReferenceKind potentialReferenceKind: MethodHandleReferenceKind.values()) {
+            if(potentialReferenceKind.KIND == kind) {
+                referenceKind = potentialReferenceKind;
+                return;
+            }
+        }
+        throw new IOException("Reference Kind not known: " + kind);
     }
 
     @Override
     public String toString() {
         return "MethodHandleConstant{" +
-                "kind=" + kind +
-                ", memberType=" + memberType +
-                ", className='" + className + '\'' +
-                ", memberName='" + memberName + '\'' +
-                ", descriptor='" + descriptor + '\'' +
+                "referenceKind=" + referenceKind +
+                ", referenceIndex=" + referenceIndex +
                 '}';
     }
 }

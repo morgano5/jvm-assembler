@@ -1,8 +1,8 @@
-package au.id.villar.bytecode.parser.constant;
+package au.id.villar.bytecode.constant;
 
-public final class ModuleParsingConstant extends IndexToUtf8ParsingConstant {
+public final class ModuleConstant extends IndexToUtf8Constant {
 
-    public ModuleParsingConstant(int descriptorIndex) {
+    public ModuleConstant(int descriptorIndex) {
         super(descriptorIndex);
     }
 
@@ -10,7 +10,7 @@ public final class ModuleParsingConstant extends IndexToUtf8ParsingConstant {
         return utf8Index;
     }
 
-    ModuleParsingConstant() {}
+    ModuleConstant() {}
 
     @Override
     public String toString() {

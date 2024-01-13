@@ -1,24 +1,18 @@
 package au.id.villar.bytecode.constant;
 
-public final class DynamicConstant extends Constant {
+public final class DynamicConstant extends AbstractDynamicConstant {
 
-//    private final String name;
-//    private final String descriptor;
-
-
-
-    @Override
-    public boolean isLoadable() {
-        return true;
+    public DynamicConstant(int bootstrapMethodAttrIndex, int nameAndTypeIndex) {
+        super(bootstrapMethodAttrIndex, nameAndTypeIndex);
     }
 
-    @Override
-    public String toAssemblyDefinition(String identifier) {
-        return String.format("d_dynamic %s %s", identifier, "PENDING");
-    }
+    DynamicConstant() {}
 
     @Override
     public String toString() {
-        return "DynamicConstant{}";
+        return "DynamicConstant{" +
+                "bootstrapMethodAttrIndex=" + bootstrapMethodAttrIndex +
+                ", nameAndTypeIndex=" + nameAndTypeIndex +
+                '}';
     }
 }

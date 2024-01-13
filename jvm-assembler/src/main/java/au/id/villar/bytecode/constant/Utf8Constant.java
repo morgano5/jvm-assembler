@@ -1,14 +1,14 @@
-package au.id.villar.bytecode.parser.constant;
+package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
 
-public final class Utf8ParsingConstant extends ValueParsingConstant {
+public final class Utf8Constant extends ValueConstant {
 
     private String value;
 
-    public Utf8ParsingConstant(String value) {
+    public Utf8Constant(String value) {
         this.value = value;
     }
 
@@ -16,7 +16,7 @@ public final class Utf8ParsingConstant extends ValueParsingConstant {
         return value;
     }
 
-    Utf8ParsingConstant() {}
+    Utf8Constant() {}
 
     @Override
     void parseBody(BytesReader bytesReader) throws IOException {

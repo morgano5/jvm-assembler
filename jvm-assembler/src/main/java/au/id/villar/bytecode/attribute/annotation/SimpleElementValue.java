@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.attribute.annotation;
 
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.Constant;
+import au.id.villar.bytecode.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class SimpleElementValue extends ElementValue {
 
     @Override
     void parseBody(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
-        value = ParsingConstant.toString(bytesReader.readShort(), constantPool);
+        value = Constant.toString(bytesReader.readShort(), constantPool);
     }
 
     @Override

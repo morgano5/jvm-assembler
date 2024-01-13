@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.Writer;
 
 class DisassemblerTest {
 
@@ -14,9 +16,10 @@ class DisassemblerTest {
         try (InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/BlockScope.class")) {
             Class aClass = ClassFileParser.parseToClass(bytecode);
 
-            System.out.println("==================\n" + new Disassembler().toAssembly(aClass));
+            Writer writer = new StringWriter();
+            Disassembler.toAssembly(aClass, writer);
+            System.out.println("==================\n" + writer);
 
         }
     }
-
 }

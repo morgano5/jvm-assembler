@@ -1,22 +1,22 @@
 package au.id.villar.bytecode.attribute;
 
-import au.id.villar.bytecode.parser.constant.ClassParsingConstant;
-import au.id.villar.bytecode.parser.constant.DynamicParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
-import au.id.villar.bytecode.parser.constant.DoubleParsingConstant;
-import au.id.villar.bytecode.parser.constant.FieldRefParsingConstant;
-import au.id.villar.bytecode.parser.constant.FloatParsingConstant;
-import au.id.villar.bytecode.parser.constant.IntegerParsingConstant;
-import au.id.villar.bytecode.parser.constant.InterfaceMethodRefParsingConstant;
-import au.id.villar.bytecode.parser.constant.LongParsingConstant;
-import au.id.villar.bytecode.parser.constant.MemberRefParsingConstant;
-import au.id.villar.bytecode.parser.constant.MethodHandleParsingConstant;
+import au.id.villar.bytecode.constant.ClassConstant;
+import au.id.villar.bytecode.constant.DynamicConstant;
+import au.id.villar.bytecode.constant.Constant;
+import au.id.villar.bytecode.constant.DoubleConstant;
+import au.id.villar.bytecode.constant.FieldRefConstant;
+import au.id.villar.bytecode.constant.FloatConstant;
+import au.id.villar.bytecode.constant.IntegerConstant;
+import au.id.villar.bytecode.constant.InterfaceMethodRefConstant;
+import au.id.villar.bytecode.constant.LongConstant;
+import au.id.villar.bytecode.constant.MemberRefConstant;
+import au.id.villar.bytecode.constant.MethodHandleConstant;
 import au.id.villar.bytecode.constant.MethodHandleReferenceKind;
-import au.id.villar.bytecode.parser.constant.MethodRefParsingConstant;
-import au.id.villar.bytecode.parser.constant.MethodTypeParsingConstant;
-import au.id.villar.bytecode.parser.constant.NameAndTypeParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
-import au.id.villar.bytecode.parser.constant.StringParsingConstant;
+import au.id.villar.bytecode.constant.MethodRefConstant;
+import au.id.villar.bytecode.constant.MethodTypeConstant;
+import au.id.villar.bytecode.constant.NameAndTypeConstant;
+import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.StringConstant;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -106,33 +106,33 @@ public class BootstrapMethodsAttribute extends ListAttribute<BootstrapMethodsAtt
 
     @Override
     BootstrapMethod parseElement(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
-        MethodHandleParsingConstant methodHandle = (MethodHandleParsingConstant)constantPool.get(bytesReader.readShort());
+        MethodHandleConstant methodHandle = (MethodHandleConstant)constantPool.get(bytesReader.readShort());
         int numArgs = bytesReader.readShort();
         List<BootstrapArgument> argumentList = new ArrayList<>(numArgs);
         while(numArgs-- > 0) {
-            ParsingConstant argType = constantPool.get(bytesReader.readShort());
-            if(argType instanceof StringParsingConstant con) {
+            Constant argType = constantPool.get(bytesReader.readShort());
+            if(argType instanceof StringConstant con) {
                 argumentList.add(new SingleBootstrapArgument(BootstrapArgumentType.STRING,
                         constantPool.getStringFromUtf8(con.getStringIndex())));
-            } else if(argType instanceof ClassParsingConstant con) {
+            } else if(argType instanceof ClassConstant con) {
                 argumentList.add(new SingleBootstrapArgument(BootstrapArgumentType.CLASS,
                         constantPool.getStringFromUtf8(con.getNameIndex())));
-            } else if(argType instanceof DoubleParsingConstant con) {
+            } else if(argType instanceof DoubleConstant con) {
                 argumentList.add(new SingleBootstrapArgument(BootstrapArgumentType.DOUBLE, con.toStringValue()));
-            } else if(argType instanceof FloatParsingConstant con) {
+            } else if(argType instanceof FloatConstant con) {
                 argumentList.add(new SingleBootstrapArgument(BootstrapArgumentType.FLOAT, con.toStringValue()));
-            } else if(argType instanceof LongParsingConstant con) {
+            } else if(argType instanceof LongConstant con) {
                 argumentList.add(new SingleBootstrapArgument(BootstrapArgumentType.LONG, con.toStringValue()));
-            } else if(argType instanceof IntegerParsingConstant con) {
+            } else if(argType instanceof IntegerConstant con) {
                 argumentList.add(new SingleBootstrapArgument(BootstrapArgumentType.INTEGER, con.toStringValue()));
-            } else if(argType instanceof MethodTypeParsingConstant con) {
+            } else if(argType instanceof MethodTypeConstant con) {
                 argumentList.add(new SingleBootstrapArgument(BootstrapArgumentType.METHOD_TYPE,
                         constantPool.getStringFromUtf8(con.getDescriptorIndex())));
-            } else if(argType instanceof MethodHandleParsingConstant con) {
+            } else if(argType instanceof MethodHandleConstant con) {
                 MethodHandleReferenceKind referenceKind = con.getReferenceKind();
                 MemberReference reference = translate(con, constantPool);
                 argumentList.add(new MethodHandleBootstrapArgument(referenceKind, reference));
-            } else if(argType instanceof DynamicParsingConstant con) {
+            } else if(argType instanceof DynamicConstant con) {
                 // TODO
                 throw new RuntimeException("Section not implemented yet");
             } else {
@@ -143,16 +143,16 @@ public class BootstrapMethodsAttribute extends ListAttribute<BootstrapMethodsAtt
                 Collections.unmodifiableList(argumentList));
     }
 
-    private MemberReference translate(MethodHandleParsingConstant constant, ParsingConstantPool constantPool)
+    private MemberReference translate(MethodHandleConstant constant, ParsingConstantPool constantPool)
             throws IOException {
-        MemberRefParsingConstant reference = (MemberRefParsingConstant)constantPool.get(constant.getReferenceIndex());
-        NameAndTypeParsingConstant nameAndType = (NameAndTypeParsingConstant)constantPool.get(reference.getNameAndTypeIndex());
+        MemberRefConstant reference = (MemberRefConstant)constantPool.get(constant.getReferenceIndex());
+        NameAndTypeConstant nameAndType = (NameAndTypeConstant)constantPool.get(reference.getNameAndTypeIndex());
         MemberReference.Type type;
-        if(reference instanceof FieldRefParsingConstant) {
+        if(reference instanceof FieldRefConstant) {
             type = MemberReference.Type.FIELD;
-        } else if (reference instanceof MethodRefParsingConstant) {
+        } else if (reference instanceof MethodRefConstant) {
             type = MemberReference.Type.METHOD;
-        } else if (reference instanceof InterfaceMethodRefParsingConstant) {
+        } else if (reference instanceof InterfaceMethodRefConstant) {
             type = MemberReference.Type.INTERFACE_METHOD;
         } else {
             throw new IOException("unexpected constant type: " + reference);

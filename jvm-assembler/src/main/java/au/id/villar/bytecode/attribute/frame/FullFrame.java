@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.attribute.frame;
 
 import au.id.villar.bytecode.attribute.frame.type.VerificationTypeInfo;
-import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;

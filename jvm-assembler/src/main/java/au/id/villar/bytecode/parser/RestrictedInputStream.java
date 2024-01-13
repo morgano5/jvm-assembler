@@ -18,9 +18,10 @@ class RestrictedInputStream extends InputStream {
     }
 
     void consumeRemaining() throws IOException {
-        long actual = wrapped.skip(remaining);
-        if(actual < remaining) {
-            throw new IOException("Unexpected end of stream");
+        while (remaining-- > 0) {
+            if (wrapped.read() == -1) {
+                throw new IOException("Unexpected end of stream");
+            }
         }
     }
 

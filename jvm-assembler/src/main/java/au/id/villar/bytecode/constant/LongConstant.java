@@ -1,8 +1,12 @@
 package au.id.villar.bytecode.constant;
 
-public final class LongConstant extends Constant {
+import au.id.villar.bytecode.util.BytesReader;
 
-    private final long value;
+import java.io.IOException;
+
+public final class LongConstant extends ValueConstant {
+
+    private long value;
 
     public LongConstant(long value) {
         this.value = value;
@@ -12,20 +16,20 @@ public final class LongConstant extends Constant {
         return value;
     }
 
+    LongConstant() {}
+
     @Override
-    public boolean isLoadable() {
-        return true;
+    void parseBody(BytesReader bytesReader) throws IOException {
+        value = bytesReader.readLong();
     }
 
     @Override
-    public String toAssemblyDefinition(String identifier) {
-        return String.format("d_long %s %d", identifier, value);
+    public String toStringValue() {
+        return String.valueOf(getValue());
     }
 
     @Override
     public String toString() {
-        return "LongConstant{" +
-                "value=" + value +
-                '}';
+        return "LongConstant{" + value + '}';
     }
 }

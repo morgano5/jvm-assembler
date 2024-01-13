@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.attribute.frame.type;
 
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.Constant;
+import au.id.villar.bytecode.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class ObjectVerificationTypeInfo extends VerificationTypeInfo {
     @Override
     void parseBody(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
         int poolIndex = bytesReader.readShort();
-        className = ParsingConstant.toString(poolIndex, constantPool);
+        className = Constant.toString(poolIndex, constantPool);
     }
 
     @Override

@@ -8,9 +8,7 @@ import au.id.villar.bytecode.attribute.Attribute;
 import au.id.villar.bytecode.attribute.AttributeGenerator;
 import au.id.villar.bytecode.attribute.DefaultAttributeGenerator;
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.parser.constant.RuntimeParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -18,9 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 class ParserClassFileHandler implements ClassFileHandler {
 
@@ -57,7 +53,7 @@ class ParserClassFileHandler implements ClassFileHandler {
                 constantPool = new ParsingConstantPool(number);
                 break;
             case ACCESS_FLAGS:
-                aClass.setAccessFlags(new AccessFlags((short) number, Class.class));
+                aClass.setAccessFlags(new AccessFlags((short) number, AccessFlags.FlagsType.CLASS));
                 break;
             case THIS_INDEX:
                 aClass.setName(constantPool.getClassName(number));
@@ -93,7 +89,7 @@ class ParserClassFileHandler implements ClassFileHandler {
     }
 
     @Override
-    public final boolean constant(ParsingConstant constant, int index) {
+    public final boolean constant(Constant constant, int index) {
         constantPool.put(index, constant);
         return true;
     }
@@ -110,7 +106,7 @@ class ParserClassFileHandler implements ClassFileHandler {
             @Override
             void execute() {
                 aClass.getFields().add(new Field(
-                        new AccessFlags((short) accessFlags, Field.class),
+                        new AccessFlags((short) accessFlags, AccessFlags.FlagsType.FIELD),
                         constantPool.getStringFromUtf8(nameIndex),
                         constantPool.getStringFromUtf8(descriptorIndex),
                         attrs
@@ -127,7 +123,7 @@ class ParserClassFileHandler implements ClassFileHandler {
             @Override
             void execute() {
                 aClass.getMethods().add(new Method(
-                        new AccessFlags((short) accessFlags, Method.class),
+                        new AccessFlags((short) accessFlags, AccessFlags.FlagsType.METHOD),
                         constantPool.getStringFromUtf8(nameIndex),
                         constantPool.getStringFromUtf8(descriptorIndex),
                         attrs
@@ -162,14 +158,7 @@ class ParserClassFileHandler implements ClassFileHandler {
 
     @Override
     public void end() {
-        final Map<Integer, Constant> constants = new HashMap<>();
-        for (Integer index : constantPool.getIndexes()) {
-            ParsingConstant constant = constantPool.get(index);
-            if (constant instanceof RuntimeParsingConstant<?> loadable) {
-                constants.put(index, loadable.toConstant(constantPool, aClass.getAttributes(), aClass.getMayor()));
-            }
-        }
-        aClass.setConstants(constants);
+        aClass.setConstants(constantPool);
     }
 
 }

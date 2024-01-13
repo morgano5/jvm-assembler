@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.attribute.annotation;
 
-import au.id.villar.bytecode.parser.constant.ParsingConstant;
-import au.id.villar.bytecode.parser.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.Constant;
+import au.id.villar.bytecode.constant.ParsingConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ public final class ElementValuePair {
     static ElementValuePair readElementValuePair(BytesReader bytesReader, ParsingConstantPool constantPool)
             throws IOException {
         ElementValuePair elementValuePair = new ElementValuePair();
-        elementValuePair.name = ParsingConstant.toString(bytesReader.readShort(), constantPool);
+        elementValuePair.name = Constant.toString(bytesReader.readShort(), constantPool);
         elementValuePair.value = ElementValue.readElementValue(bytesReader, constantPool);
         return elementValuePair;
     }

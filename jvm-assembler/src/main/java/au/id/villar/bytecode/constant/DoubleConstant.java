@@ -1,8 +1,12 @@
 package au.id.villar.bytecode.constant;
 
-public final class DoubleConstant extends Constant {
+import au.id.villar.bytecode.util.BytesReader;
 
-    private final double value;
+import java.io.IOException;
+
+public final class DoubleConstant extends ValueConstant {
+
+    private double value;
 
     public DoubleConstant(double value) {
         this.value = value;
@@ -12,20 +16,20 @@ public final class DoubleConstant extends Constant {
         return value;
     }
 
+    DoubleConstant() {}
+
     @Override
-    public boolean isLoadable() {
-        return true;
+    void parseBody(BytesReader bytesReader) throws IOException {
+        value = bytesReader.readDouble();
     }
 
     @Override
-    public String toAssemblyDefinition(String identifier) {
-        return String.format("d_double %s %e", identifier, value);
+    public String toStringValue() {
+        return String.valueOf(getValue());
     }
 
     @Override
     public String toString() {
-        return "DoubleConstant{" +
-                "value=" + value +
-                '}';
+        return "DoubleConstant{" + value + '}';
     }
 }
