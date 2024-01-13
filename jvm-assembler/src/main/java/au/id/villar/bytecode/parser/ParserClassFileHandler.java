@@ -8,7 +8,7 @@ import au.id.villar.bytecode.attribute.Attribute;
 import au.id.villar.bytecode.attribute.AttributeGenerator;
 import au.id.villar.bytecode.attribute.DefaultAttributeGenerator;
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.util.List;
 
 class ParserClassFileHandler implements ClassFileHandler {
 
-    private ParsingConstantPool constantPool;
+    private ConstantPool constantPool;
     private final Class aClass;
     private final AttributeGenerator attrGenerator;
 
@@ -50,7 +50,7 @@ class ParserClassFileHandler implements ClassFileHandler {
                 aClass.setMayor(number);
                 break;
             case CONSTANT_POOL:
-                constantPool = new ParsingConstantPool(number);
+                constantPool = new ConstantPool(number);
                 break;
             case ACCESS_FLAGS:
                 aClass.setAccessFlags(new AccessFlags((short) number, AccessFlags.FlagsType.CLASS));

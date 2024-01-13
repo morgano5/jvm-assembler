@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.attribute;
 
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class GenericAttribute extends Attribute {
     }
 
     @Override
-    public void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
+    public void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException {
         if(length > 0) {
             data = new byte[length];

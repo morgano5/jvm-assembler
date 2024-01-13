@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.attribute;
 
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class ExceptionsAttribute extends ListAttribute<String> {
     ExceptionsAttribute() {}
 
     @Override
-    String parseElement(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    String parseElement(BytesReader bytesReader, ConstantPool constantPool) throws IOException {
         return Constant.toString(bytesReader.readShort(), constantPool);
     }
 }

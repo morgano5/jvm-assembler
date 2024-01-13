@@ -1,13 +1,13 @@
 package au.id.villar.bytecode.attribute.frame;
 
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
 
 public abstract class StackMapFrame {
 
-    public static StackMapFrame readStackMapFrame(BytesReader bytesReader, ParsingConstantPool constantPool)
+    public static StackMapFrame readStackMapFrame(BytesReader bytesReader, ConstantPool constantPool)
             throws IOException {
 
         StackMapFrame mapFrame;
@@ -38,6 +38,6 @@ public abstract class StackMapFrame {
 
     abstract public int getOffsetDelta();
 
-    abstract void parseBody(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException;
+    abstract void parseBody(BytesReader bytesReader, ConstantPool constantPool) throws IOException;
 
 }

@@ -24,7 +24,7 @@ import au.id.villar.bytecode.constant.ModuleConstant;
 import au.id.villar.bytecode.constant.NameAndTypeConstant;
 import au.id.villar.bytecode.constant.PackageConstant;
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.constant.StringConstant;
 
 import java.io.IOException;
@@ -95,7 +95,7 @@ public class Disassembler {
         write("%s.descriptor \"%s\"%n", INDENTATION, field.getDescriptor());
     }
 
-    private void writeMethod(Method method, ParsingConstantPool constants) throws IOException {
+    private void writeMethod(Method method, ConstantPool constants) throws IOException {
         write("%nMETHOD \"%s\"%n", method.getName());
         write("%s.access", INDENTATION);
         writeFlags(method.getAccessFlags());
@@ -111,7 +111,7 @@ public class Disassembler {
     }
 
     private ConstantsAndLabels calculateBranchLabelsAndConstants(CodeAttribute codeAttribute,
-            ParsingConstantPool constants) throws IOException {
+            ConstantPool constants) throws IOException {
         final ConstantsAndLabels constantsAndLabels = new ConstantsAndLabels(new HashMap<>(), new HashMap<>());
         try (InputStream codeStream = codeAttribute.createCodeStream()) {
             CodeParser.parse(codeStream, codeAttribute.getCodeLength(), new CodeHandler() {
@@ -324,7 +324,7 @@ public class Disassembler {
     }
 
     private void writeConstant(Integer index, Constant constant) {
-        ParsingConstantPool constantPool = aClass.getConstants();
+        ConstantPool constantPool = aClass.getConstants();
         if (constant instanceof IntegerConstant c) {
             write("d_int c%d %d", index, c.getValue());
         } else if (constant instanceof LongConstant c) {

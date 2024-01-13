@@ -2,7 +2,7 @@ package au.id.villar.bytecode.attribute.annotation;
 
 //import au.id.villar.bytecode.attribute.annotation.target.Target;
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class TypeAnnotation extends Annotation {
         return typePaths;
     }
 
-    public static TypeAnnotation readTypeAnnotation(BytesReader bytesReader, ParsingConstantPool constantPool)
+    public static TypeAnnotation readTypeAnnotation(BytesReader bytesReader, ConstantPool constantPool)
             throws IOException {
 //		Target target = Target.readTarget(bytesReader);
         int typePathSize = bytesReader.readByte();

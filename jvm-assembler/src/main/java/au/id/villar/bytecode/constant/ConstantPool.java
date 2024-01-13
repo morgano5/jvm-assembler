@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ParsingConstantPool {
+public class ConstantPool {
 
     private final Map<Integer, Constant> constants;
 
-    public ParsingConstantPool(int initialCapacity) {
+    public ConstantPool(int initialCapacity) {
         constants = new HashMap<>(initialCapacity);
     }
 

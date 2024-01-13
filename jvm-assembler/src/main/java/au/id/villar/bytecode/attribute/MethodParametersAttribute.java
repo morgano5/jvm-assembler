@@ -2,7 +2,7 @@ package au.id.villar.bytecode.attribute;
 
 import au.id.villar.bytecode.AccessFlags;
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class MethodParametersAttribute extends ListAttribute<MethodParametersAtt
     }
 
     @Override
-    ParameterInfo parseElement(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    ParameterInfo parseElement(BytesReader bytesReader, ConstantPool constantPool) throws IOException {
         return new ParameterInfo(Constant.toString(bytesReader.readShort(), constantPool),
                 new AccessFlags((short)bytesReader.readShort(), AccessFlags.FlagsType.METHOD_PARAMETERS));
     }

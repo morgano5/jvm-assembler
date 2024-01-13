@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.attribute.annotation;
 
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class Annotation {
         return values;
     }
 
-    public static Annotation readAnnotation(BytesReader bytesReader, ParsingConstantPool constantPool)
+    public static Annotation readAnnotation(BytesReader bytesReader, ConstantPool constantPool)
             throws IOException {
         Annotation annotation = new Annotation();
         annotation.type = Constant.toString(bytesReader.readShort(), constantPool);

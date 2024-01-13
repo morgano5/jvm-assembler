@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.attribute;
 
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class LocalVariableTypeTableAttribute
     }
 
     @Override
-    LocalVariableTypeInfo parseElement(BytesReader bytesReader, ParsingConstantPool constantPool)
+    LocalVariableTypeInfo parseElement(BytesReader bytesReader, ConstantPool constantPool)
             throws IOException {
         return new LocalVariableTypeInfo(bytesReader.readShort(),
                 bytesReader.readShort(),

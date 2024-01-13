@@ -46,7 +46,7 @@ public abstract sealed class Constant
     }
 
     @Deprecated
-    public static String toString(int index, ParsingConstantPool constantPool) {
+    public static String toString(int index, ConstantPool constantPool) {
 
         final Constant constant = constantPool.get(index);
 

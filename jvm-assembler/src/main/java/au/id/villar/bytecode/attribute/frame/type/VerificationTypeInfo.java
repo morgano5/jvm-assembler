@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.attribute.frame.type;
 
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.io.IOException;
 public abstract class VerificationTypeInfo {
 
     public static VerificationTypeInfo readVerificationTypeInfo(BytesReader bytesReader,
-            ParsingConstantPool constantPool) throws IOException {
+            ConstantPool constantPool) throws IOException {
 
         VerificationTypeInfo typeInfo;
         int tag = bytesReader.readByte();
@@ -32,6 +32,6 @@ public abstract class VerificationTypeInfo {
 
     VerificationTypeInfo() {}
 
-    abstract void parseBody(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException;
+    abstract void parseBody(BytesReader bytesReader, ConstantPool constantPool) throws IOException;
 }
 

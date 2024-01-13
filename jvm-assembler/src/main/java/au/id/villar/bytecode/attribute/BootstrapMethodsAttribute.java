@@ -15,7 +15,7 @@ import au.id.villar.bytecode.constant.MethodHandleReferenceKind;
 import au.id.villar.bytecode.constant.MethodRefConstant;
 import au.id.villar.bytecode.constant.MethodTypeConstant;
 import au.id.villar.bytecode.constant.NameAndTypeConstant;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.constant.StringConstant;
 import au.id.villar.bytecode.util.BytesReader;
 
@@ -105,7 +105,7 @@ public class BootstrapMethodsAttribute extends ListAttribute<BootstrapMethodsAtt
     }
 
     @Override
-    BootstrapMethod parseElement(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    BootstrapMethod parseElement(BytesReader bytesReader, ConstantPool constantPool) throws IOException {
         MethodHandleConstant methodHandle = (MethodHandleConstant)constantPool.get(bytesReader.readShort());
         int numArgs = bytesReader.readShort();
         List<BootstrapArgument> argumentList = new ArrayList<>(numArgs);
@@ -143,7 +143,7 @@ public class BootstrapMethodsAttribute extends ListAttribute<BootstrapMethodsAtt
                 Collections.unmodifiableList(argumentList));
     }
 
-    private MemberReference translate(MethodHandleConstant constant, ParsingConstantPool constantPool)
+    private MemberReference translate(MethodHandleConstant constant, ConstantPool constantPool)
             throws IOException {
         MemberRefConstant reference = (MemberRefConstant)constantPool.get(constant.getReferenceIndex());
         NameAndTypeConstant nameAndType = (NameAndTypeConstant)constantPool.get(reference.getNameAndTypeIndex());

@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.attribute;
 
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ public class LineNumberTableAttribute extends ListAttribute<LineNumberTableAttri
     }
 
     @Override
-    LineNumber parseElement(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    LineNumber parseElement(BytesReader bytesReader, ConstantPool constantPool) throws IOException {
         return new LineNumber(bytesReader.readShort(), bytesReader.readShort());
     }
 }

@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.attribute;
 
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ abstract class ListAttribute<T> extends Attribute {
     }
 
     @Override
-    public final void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
+    public final void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException {
         int size = bytesReader.readShort();
         list = new ArrayList<>(size);
@@ -27,7 +27,7 @@ abstract class ListAttribute<T> extends Attribute {
         list = Collections.unmodifiableList(list);
     }
 
-    abstract T parseElement(BytesReader bytesReader, ParsingConstantPool constantPool)
+    abstract T parseElement(BytesReader bytesReader, ConstantPool constantPool)
             throws IOException;
 
     @Override

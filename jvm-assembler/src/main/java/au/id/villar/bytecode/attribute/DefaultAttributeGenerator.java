@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.attribute;
 
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ public class DefaultAttributeGenerator implements AttributeGenerator {
 
     @Override
     public <T extends Attribute> T readAttribute(Class<T> type, int length, BytesReader bytesReader,
-            ParsingConstantPool constantPool, AttributeGenerator generator) throws IOException {
+            ConstantPool constantPool, AttributeGenerator generator) throws IOException {
 
         final Attribute attribute;
         if (type == CodeAttribute.class) {
@@ -68,7 +68,7 @@ public class DefaultAttributeGenerator implements AttributeGenerator {
 
     @Override
     public GenericAttribute readGenericAttribute(String name, int length, BytesReader bytesReader,
-            ParsingConstantPool constantPool, AttributeGenerator generator) throws IOException {
+            ConstantPool constantPool, AttributeGenerator generator) throws IOException {
         GenericAttribute attribute = new GenericAttribute(name);
         attribute.parseBody(length, bytesReader, constantPool, generator);
         return attribute;

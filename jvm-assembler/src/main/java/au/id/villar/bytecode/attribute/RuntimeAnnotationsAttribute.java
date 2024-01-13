@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.attribute;
 
 import au.id.villar.bytecode.attribute.annotation.Annotation;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ abstract class RuntimeAnnotationsAttribute extends ListAttribute<Annotation> {
     RuntimeAnnotationsAttribute() {}
 
     @Override
-    Annotation parseElement(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    Annotation parseElement(BytesReader bytesReader, ConstantPool constantPool) throws IOException {
         return Annotation.readAnnotation(bytesReader, constantPool);
     }
 }

@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.attribute;
 
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.io.IOException;
 public abstract class Attribute {
 
     public static Attribute readAttribute(String name, int length, BytesReader bytesReader,
-            ParsingConstantPool constantPool, AttributeGenerator generator) throws IOException {
+            ConstantPool constantPool, AttributeGenerator generator) throws IOException {
 
         Class<? extends Attribute> attributeClass = switch (name) {
             case "Code" -> CodeAttribute.class;
@@ -44,7 +44,7 @@ public abstract class Attribute {
 
     Attribute() {}
 
-    public abstract void parseBody(int length, BytesReader bytesReader, ParsingConstantPool constantPool,
+    public abstract void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException;
 
 }

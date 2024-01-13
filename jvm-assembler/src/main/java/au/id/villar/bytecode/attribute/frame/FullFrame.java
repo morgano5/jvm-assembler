@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.attribute.frame;
 
 import au.id.villar.bytecode.attribute.frame.type.VerificationTypeInfo;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class FullFrame extends ExplicitOffsetDeltaFrame {
     }
 
     @Override
-    void parseBody(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    void parseBody(BytesReader bytesReader, ConstantPool constantPool) throws IOException {
         int aux;
         aux = bytesReader.readShort();
         locals = new ArrayList<>(aux);

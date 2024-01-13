@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.attribute.annotation;
 
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.io.IOException;
 public abstract class ElementValue {
 
 
-    public static ElementValue readElementValue(BytesReader bytesReader, ParsingConstantPool constantPool)
+    public static ElementValue readElementValue(BytesReader bytesReader, ConstantPool constantPool)
             throws IOException {
 
         ElementValue elementValue;
@@ -35,6 +35,6 @@ public abstract class ElementValue {
 
     ElementValue() {}
 
-    abstract void parseBody(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException;
+    abstract void parseBody(BytesReader bytesReader, ConstantPool constantPool) throws IOException;
 
 }

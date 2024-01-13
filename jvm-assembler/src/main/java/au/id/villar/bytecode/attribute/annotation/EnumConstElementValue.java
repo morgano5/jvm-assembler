@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.attribute.annotation;
 
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class EnumConstElementValue extends ElementValue {
     }
 
     @Override
-    void parseBody(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    void parseBody(BytesReader bytesReader, ConstantPool constantPool) throws IOException {
         type = Constant.toString(bytesReader.readShort(), constantPool);
         name = Constant.toString(bytesReader.readShort(), constantPool);
     }

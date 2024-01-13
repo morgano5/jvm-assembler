@@ -2,7 +2,7 @@ package au.id.villar.bytecode.attribute;
 
 import au.id.villar.bytecode.AccessFlags;
 import au.id.villar.bytecode.constant.Constant;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
 
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class InnerClassesAttribute extends ListAttribute<InnerClassesAttribute.C
     InnerClassesAttribute() {}
 
     @Override
-    ClassInfo parseElement(BytesReader bytesReader, ParsingConstantPool constantPool) throws IOException {
+    ClassInfo parseElement(BytesReader bytesReader, ConstantPool constantPool) throws IOException {
         int innerIndex = bytesReader.readShort();
         int outerIndex = bytesReader.readShort();
         int nameIndex = bytesReader.readShort();

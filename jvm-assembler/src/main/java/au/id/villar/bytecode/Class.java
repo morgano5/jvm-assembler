@@ -1,7 +1,7 @@
 package au.id.villar.bytecode;
 
 import au.id.villar.bytecode.attribute.Attribute;
-import au.id.villar.bytecode.constant.ParsingConstantPool;
+import au.id.villar.bytecode.constant.ConstantPool;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class Class {
     private int mayor;
     private int minor;
     private AccessFlags accessFlags;
-    private ParsingConstantPool constants;
+    private ConstantPool constants;
     private String name;
     private String superClass;
     private List<String> interfaces;
@@ -34,11 +34,11 @@ public class Class {
         this.minor = minor;
     }
 
-    public ParsingConstantPool getConstants() {
+    public ConstantPool getConstants() {
         return constants;
     }
 
-    public void setConstants(ParsingConstantPool constants) {
+    public void setConstants(ConstantPool constants) {
         this.constants = constants;
     }
 
