@@ -1,6 +1,5 @@
 package au.id.villar.bytecode.parser;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -32,38 +31,38 @@ public interface CodeHandler {
         }
     }
 
-    default void operation(int offset, int opcode) throws IOException {};
+    default void operation(int offset, int opcode) {};
 
-    default void operationImmediateByte(int offset, int opcode, byte operand) throws IOException {};
+    default void operationImmediateByte(int offset, int opcode, byte operand) {};
 
-    default void operationSignedShortOperand(int offset, int opcode, short operand) throws IOException {};
+    default void operationSignedShortOperand(int offset, int opcode, short operand) {};
 
-    default void operationConstantPoolIndex(int offset, int opcode, int poolIndex) throws IOException {};
+    default void operationConstantPoolIndex(int offset, int opcode, int poolIndex) {};
 
-    default void operationByteIndex(int offset, int opcode, int index) throws IOException {};
+    default void operationByteIndex(int offset, int opcode, int index) {};
 
-    default void operationArrayType(int offset, int opcode, ArrayType arrayType) throws IOException {};
+    default void operationArrayType(int offset, int opcode, ArrayType arrayType) {};
 
-    default void operationIntIncrement(int offset, int opcode, int index, int value) throws IOException {};
+    default void operationIntIncrement(int offset, int opcode, int index, int value) {};
 
     default void operationTableswitch(int offset, int opcode, int defaultOffset, int low, int high,
-            Iterator<Integer> offsets) throws IOException {};
+            Iterator<Integer> offsets) {};
 
     default void operationLookupswitch(int offset, int opcode, int defaultOffset, int numPairs,
-            Iterator<Map.Entry<Integer, Integer>> offsets) throws IOException {};
+            Iterator<Map.Entry<Integer, Integer>> offsets) {};
 
-    default void operationWideByteIndex(int offset, int opcode, int index) throws IOException {};
+    default void operationWideByteIndex(int offset, int opcode, int index) {};
 
-    default void operationWideIntIncrement(int offset, int opcode, int index, int value) throws IOException {};
+    default void operationWideIntIncrement(int offset, int opcode, int index, int value) {};
 
-    default void operationMultiANewArray(int offset, int opcode, int poolIndex, int dimensions) throws IOException {};
+    default void operationMultiANewArray(int offset, int opcode, int poolIndex, int dimensions) {};
 
-    default void operationBranching(int offset, int opcode, short branchingOffset) throws IOException {};
+    default void operationBranching(int offset, int opcode, short branchingOffset) {};
 
-    default void operationLongBranching(int offset, int opcode, int branchingOffset) throws IOException {};
+    default void operationLongBranching(int offset, int opcode, int branchingOffset) {};
 
-    default void operationInvokeDynamic(int offset, int opcode, int poolIndex) throws IOException {};
+    default void operationInvokeDynamic(int offset, int opcode, int poolIndex) {};
 
-    default void operationInvokeInterface(int offset, int opcode, int poolIndex, int count) throws IOException {};
+    default void operationInvokeInterface(int offset, int opcode, int poolIndex, int count) {};
 
 }
