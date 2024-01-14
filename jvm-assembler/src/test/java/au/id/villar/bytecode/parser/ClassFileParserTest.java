@@ -115,21 +115,21 @@ public class ClassFileParserTest {
     @Test
     public void softBasicTest() throws IOException {
         try (InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/AnnotatableTypeSystem.class")) {
-            ClassFile aClass = ClassFileParser.parseToClass(bytecode);
-            assertEquals("org/eclipse/jdt/internal/compiler/lookup/AnnotatableTypeSystem", aClass.getName());
-            assertEquals("org/eclipse/jdt/internal/compiler/lookup/TypeSystem", aClass.getSuperClass());
-            assertEquals(50, aClass.getMayor());
+            ClassFile classFile = ClassFileParser.parseToClass(bytecode);
+            assertEquals("org/eclipse/jdt/internal/compiler/lookup/AnnotatableTypeSystem", classFile.getName());
+            assertEquals("org/eclipse/jdt/internal/compiler/lookup/TypeSystem", classFile.getSuperClass());
+            assertEquals(50, classFile.getMayor());
 
 
-            System.out.println(">>> " + aClass.getConstants().getIndexes().size());
-            for (Integer index : aClass.getConstants().getIndexes()) {
-                Constant constant = aClass.getConstants().get(index);
+            System.out.println(">>> " + classFile.getConstants().getIndexes().size());
+            for (Integer index : classFile.getConstants().getIndexes()) {
+                Constant constant = classFile.getConstants().get(index);
                 System.out.format(">> %3d: %s%n", index, constant.toString());
             }
         }
 
 //		try(FileInputStream bytecode = new FileInputStream("/home/villarr/Desktop/MyBean.class")) {
-//			ClassFile aClass = ClassFile.build(bytecode);
+//			ClassFile classFile = ClassFile.build(bytecode);
 //		}
     }
 }

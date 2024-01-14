@@ -42,30 +42,30 @@ public class Disassembler {
     private static final String INDENTATION = "    ";
     private static final String OBJECT_CLASS_NAME = "java/lang/Object";
 
-    private final ClassFile aClass;
+    private final ClassFile classFile;
     private final Writer writer;
 
-    private Disassembler(ClassFile aClass, Writer writer) {
-        this.aClass = aClass;
+    private Disassembler(ClassFile classFile, Writer writer) {
+        this.classFile = classFile;
         this.writer = writer;
     }
 
-    public static void toAssembly(ClassFile aClass, Writer writer) throws IOException {
-        Disassembler disassembler = new Disassembler(aClass, writer);
+    public static void toAssembly(ClassFile classFile, Writer writer) throws IOException {
+        Disassembler disassembler = new Disassembler(classFile, writer);
         disassembler.toAssembly();
     }
 
     private void toAssembly() throws IOException {
 
         try {
-            writeClassData(aClass);
+            writeClassData(classFile);
 
-            for (Field field : aClass.getFields()) {
+            for (Field field : classFile.getFields()) {
                 writeField(field);
             }
 
-            for (Method method : aClass.getMethods()) {
-                writeMethod(method, aClass.getConstants());
+            for (Method method : classFile.getMethods()) {
+                writeMethod(method, classFile.getConstants());
             }
         } catch (UncheckedIOException e) {
             throw e.getCause();
@@ -73,16 +73,16 @@ public class Disassembler {
 
     }
 
-    private void writeClassData(ClassFile aClass) {
-        write("CLASS \"%s\"%n", aClass.getName());
-        write("%s.version %d %d%n", INDENTATION, aClass.getMayor(), aClass.getMinor());
+    private void writeClassData(ClassFile classFile) {
+        write("CLASS \"%s\"%n", classFile.getName());
+        write("%s.version %d %d%n", INDENTATION, classFile.getMayor(), classFile.getMinor());
         write("%s.access", INDENTATION);
-        writeFlags(aClass.getAccessFlags());
+        writeFlags(classFile.getAccessFlags());
         write("%n");
-        if (!OBJECT_CLASS_NAME.equals(aClass.getSuperClass())) {
-            write("%s.super \"%s\"%n", INDENTATION, aClass.getSuperClass());
+        if (!OBJECT_CLASS_NAME.equals(classFile.getSuperClass())) {
+            write("%s.super \"%s\"%n", INDENTATION, classFile.getSuperClass());
         }
-        for (String iface : aClass.getInterfaces()) {
+        for (String iface : classFile.getInterfaces()) {
             write("%s.implements \"%s\"%n", INDENTATION, iface);
         }
     }
@@ -324,7 +324,7 @@ public class Disassembler {
     }
 
     private void writeConstant(Integer index, Constant constant) {
-        ConstantPool constantPool = aClass.getConstants();
+        ConstantPool constantPool = classFile.getConstants();
         if (constant instanceof IntegerConstant c) {
             write("d_int     c%d %d", index, c.getValue());
         } else if (constant instanceof LongConstant c) {
@@ -376,7 +376,7 @@ public class Disassembler {
     }
 
     public String utf8ConstantWithEscapedChars(Integer utf8Index) {
-        String string = aClass.getConstants().getStringFromUtf8(utf8Index);
+        String string = classFile.getConstants().getStringFromUtf8(utf8Index);
         StringBuilder formatted = new StringBuilder(string);
         replace(formatted, "\\", "\\\\");
         replace(formatted, "\b", "\\b");

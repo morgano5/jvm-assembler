@@ -14,10 +14,10 @@ class DisassemblerTest {
     @Test
     void shouldDisassemble() throws IOException {
         try (InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/BlockScope.class")) {
-            ClassFile aClass = ClassFileParser.parseToClass(bytecode);
+            ClassFile classFile = ClassFileParser.parseToClass(bytecode);
 
             Writer writer = new StringWriter();
-            Disassembler.toAssembly(aClass, writer);
+            Disassembler.toAssembly(classFile, writer);
             System.out.println("==================\n" + writer);
 
         }

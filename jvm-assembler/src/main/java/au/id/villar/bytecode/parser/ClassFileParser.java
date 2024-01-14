@@ -18,9 +18,9 @@ public class ClassFileParser {
     }
 
     public static ClassFile parseToClass(InputStream stream) throws IOException {
-        ClassFile aClass = new ClassFile();
-        ClassFileParser.parse(stream, new ParserClassFileHandler(aClass));
-        return aClass;
+        ClassFile classFile = new ClassFile();
+        ClassFileParser.parse(stream, new ParserClassFileHandler(classFile));
+        return classFile;
     }
 
     private final InputStream bytecode;

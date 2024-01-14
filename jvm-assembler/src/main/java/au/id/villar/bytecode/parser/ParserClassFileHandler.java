@@ -21,11 +21,11 @@ import java.util.List;
 class ParserClassFileHandler implements ClassFileHandler {
 
     private ConstantPool constantPool;
-    private final ClassFile aClass;
+    private final ClassFile classFile;
     private final AttributeGenerator attrGenerator;
 
-    public ParserClassFileHandler(ClassFile aClass) {
-        this.aClass = aClass;
+    public ParserClassFileHandler(ClassFile classFile) {
+        this.classFile = classFile;
         this.attrGenerator = new DefaultAttributeGenerator();
     }
 
@@ -44,33 +44,33 @@ class ParserClassFileHandler implements ClassFileHandler {
     public final boolean number(int number, NumberType numberType) {
         switch (numberType) {
             case MINOR:
-                aClass.setMinor(number);
+                classFile.setMinor(number);
                 break;
             case MAYOR:
-                aClass.setMayor(number);
+                classFile.setMayor(number);
                 break;
             case CONSTANT_POOL:
                 constantPool = new ConstantPool(number);
                 break;
             case ACCESS_FLAGS:
-                aClass.setAccessFlags(new AccessFlags((short) number, AccessFlags.FlagsType.CLASS));
+                classFile.setAccessFlags(new AccessFlags((short) number, AccessFlags.FlagsType.CLASS));
                 break;
             case THIS_INDEX:
-                aClass.setName(constantPool.getClassName(number));
+                classFile.setName(constantPool.getClassName(number));
                 break;
             case SUPER_INDEX:
                 if (number != 0) {
-                    aClass.setSuperClass(constantPool.getClassName(number));
+                    classFile.setSuperClass(constantPool.getClassName(number));
                 }
                 break;
             case INTERFACES:
-                aClass.setInterfaces(new ArrayList<>(number));
+                classFile.setInterfaces(new ArrayList<>(number));
                 break;
             case FIELDS:
-                aClass.setFields(new ArrayList<>(number));
+                classFile.setFields(new ArrayList<>(number));
                 break;
             case METHODS:
-                aClass.setMethods(new ArrayList<>(number));
+                classFile.setMethods(new ArrayList<>(number));
                 break;
             case ATTRIBUTES:
                 AttrCounter attrCounter = attrCounters.peekFirst();
@@ -82,7 +82,7 @@ class ParserClassFileHandler implements ClassFileHandler {
                         attrCounters.pollFirst();
                     }
                 } else {
-                    aClass.setAttributes(new ArrayList<>(number));
+                    classFile.setAttributes(new ArrayList<>(number));
                 }
         }
         return true;
@@ -96,7 +96,7 @@ class ParserClassFileHandler implements ClassFileHandler {
 
     @Override
     public final boolean interfaceIndex(int constantPoolIndex) {
-        aClass.getInterfaces().add(constantPool.getClassName(constantPoolIndex));
+        classFile.getInterfaces().add(constantPool.getClassName(constantPoolIndex));
         return true;
     }
 
@@ -105,7 +105,7 @@ class ParserClassFileHandler implements ClassFileHandler {
         AttrCounter attrCounter = new AttrCounter() {
             @Override
             void execute() {
-                aClass.getFields().add(new Field(
+                classFile.getFields().add(new Field(
                         new AccessFlags((short) accessFlags, AccessFlags.FlagsType.FIELD),
                         constantPool.getStringFromUtf8(nameIndex),
                         constantPool.getStringFromUtf8(descriptorIndex),
@@ -122,7 +122,7 @@ class ParserClassFileHandler implements ClassFileHandler {
         AttrCounter attrCounter = new AttrCounter() {
             @Override
             void execute() {
-                aClass.getMethods().add(new Method(
+                classFile.getMethods().add(new Method(
                         new AccessFlags((short) accessFlags, AccessFlags.FlagsType.METHOD),
                         constantPool.getStringFromUtf8(nameIndex),
                         constantPool.getStringFromUtf8(descriptorIndex),
@@ -151,14 +151,14 @@ class ParserClassFileHandler implements ClassFileHandler {
                 attrCounter.execute();
             }
         } else {
-            aClass.getAttributes().add(attribute);
+            classFile.getAttributes().add(attribute);
         }
         return true;
     }
 
     @Override
     public void end() {
-        aClass.setConstants(constantPool);
+        classFile.setConstants(constantPool);
     }
 
 }
