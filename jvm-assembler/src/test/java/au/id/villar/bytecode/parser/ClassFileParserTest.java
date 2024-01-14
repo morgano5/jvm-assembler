@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.parser;
 
-import au.id.villar.bytecode.Class;
+import au.id.villar.bytecode.ClassFile;
 import au.id.villar.bytecode.constant.ClassConstant;
 import au.id.villar.bytecode.constant.Constant;
 import au.id.villar.bytecode.constant.Utf8Constant;
@@ -115,7 +115,7 @@ public class ClassFileParserTest {
     @Test
     public void softBasicTest() throws IOException {
         try (InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/AnnotatableTypeSystem.class")) {
-            Class aClass = ClassFileParser.parseToClass(bytecode);
+            ClassFile aClass = ClassFileParser.parseToClass(bytecode);
             assertEquals("org/eclipse/jdt/internal/compiler/lookup/AnnotatableTypeSystem", aClass.getName());
             assertEquals("org/eclipse/jdt/internal/compiler/lookup/TypeSystem", aClass.getSuperClass());
             assertEquals(50, aClass.getMayor());
@@ -129,7 +129,7 @@ public class ClassFileParserTest {
         }
 
 //		try(FileInputStream bytecode = new FileInputStream("/home/villarr/Desktop/MyBean.class")) {
-//			Class aClass = Class.build(bytecode);
+//			ClassFile aClass = ClassFile.build(bytecode);
 //		}
     }
 }

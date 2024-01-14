@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.parser;
 
-import au.id.villar.bytecode.Class;
+import au.id.villar.bytecode.ClassFile;
 import au.id.villar.bytecode.constant.Constant;
 import au.id.villar.bytecode.constant.DoubleConstant;
 import au.id.villar.bytecode.constant.LongConstant;
@@ -17,8 +17,8 @@ public class ClassFileParser {
         parser.parse();
     }
 
-    public static Class parseToClass(InputStream stream) throws IOException {
-        Class aClass = new Class();
+    public static ClassFile parseToClass(InputStream stream) throws IOException {
+        ClassFile aClass = new ClassFile();
         ClassFileParser.parse(stream, new ParserClassFileHandler(aClass));
         return aClass;
     }

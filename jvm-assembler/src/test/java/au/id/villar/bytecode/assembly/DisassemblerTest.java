@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.assembly;
 
-import au.id.villar.bytecode.Class;
+import au.id.villar.bytecode.ClassFile;
 import au.id.villar.bytecode.parser.ClassFileParser;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ class DisassemblerTest {
     @Test
     void shouldDisassemble() throws IOException {
         try (InputStream bytecode = ClassLoader.getSystemResourceAsStream("class/BlockScope.class")) {
-            Class aClass = ClassFileParser.parseToClass(bytecode);
+            ClassFile aClass = ClassFileParser.parseToClass(bytecode);
 
             Writer writer = new StringWriter();
             Disassembler.toAssembly(aClass, writer);

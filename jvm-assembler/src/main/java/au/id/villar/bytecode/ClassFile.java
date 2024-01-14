@@ -5,7 +5,7 @@ import au.id.villar.bytecode.constant.ConstantPool;
 
 import java.util.List;
 
-public class Class {
+public class ClassFile {
 
     private int mayor;
     private int minor;
@@ -100,7 +100,7 @@ public class Class {
 
     @Override
     public String toString() {
-        return "Class{" +
+        return "ClassFile{" +
                 "name='" + name + '\'' +
                 ", mayor=" + mayor +
                 ", minor=" + minor +

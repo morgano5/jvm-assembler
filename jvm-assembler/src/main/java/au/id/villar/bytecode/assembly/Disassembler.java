@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.assembly;
 
 import au.id.villar.bytecode.AccessFlags;
-import au.id.villar.bytecode.Class;
+import au.id.villar.bytecode.ClassFile;
 import au.id.villar.bytecode.Field;
 import au.id.villar.bytecode.Method;
 import au.id.villar.bytecode.attribute.Attribute;
@@ -42,15 +42,15 @@ public class Disassembler {
     private static final String INDENTATION = "    ";
     private static final String OBJECT_CLASS_NAME = "java/lang/Object";
 
-    private final Class aClass;
+    private final ClassFile aClass;
     private final Writer writer;
 
-    private Disassembler(Class aClass, Writer writer) {
+    private Disassembler(ClassFile aClass, Writer writer) {
         this.aClass = aClass;
         this.writer = writer;
     }
 
-    public static void toAssembly(Class aClass, Writer writer) throws IOException {
+    public static void toAssembly(ClassFile aClass, Writer writer) throws IOException {
         Disassembler disassembler = new Disassembler(aClass, writer);
         disassembler.toAssembly();
     }
@@ -73,7 +73,7 @@ public class Disassembler {
 
     }
 
-    private void writeClassData(Class aClass) {
+    private void writeClassData(ClassFile aClass) {
         write("CLASS \"%s\"%n", aClass.getName());
         write("%s.version %d %d%n", INDENTATION, aClass.getMayor(), aClass.getMinor());
         write("%s.access", INDENTATION);
@@ -326,21 +326,21 @@ public class Disassembler {
     private void writeConstant(Integer index, Constant constant) {
         ConstantPool constantPool = aClass.getConstants();
         if (constant instanceof IntegerConstant c) {
-            write("d_int c%d %d", index, c.getValue());
+            write("d_int     c%d %d", index, c.getValue());
         } else if (constant instanceof LongConstant c) {
-            write("d_long c%d %d", index, c.getValue());
+            write("d_long    c%d %d", index, c.getValue());
         } else if (constant instanceof FloatConstant c) {
-            write("d_float c%d %f", index, c.getValue());
+            write("d_float   c%d %f", index, c.getValue());
         } else if (constant instanceof DoubleConstant c) {
-            write("d_double c%d %f", index, c.getValue());
+            write("d_double  c%d %f", index, c.getValue());
         } else if (constant instanceof StringConstant c) {
-            write("d_string c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getStringIndex()));
+            write("d_string  c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getStringIndex()));
         } else if (constant instanceof ClassConstant c) {
-            write("d_class c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getNameIndex()));
+            write("d_class   c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getNameIndex()));
         } else if (constant instanceof PackageConstant c) {
             write("d_package c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getNameIndex()));
         } else if (constant instanceof ModuleConstant c) {
-            write("d_module c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getNameIndex()));
+            write("d_module  c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getNameIndex()));
         } else if (constant instanceof MethodTypeConstant c) {
             write("d_method_type c%d \"%s\"", index, utf8ConstantWithEscapedChars(c.getDescriptorIndex()));
         } else if (constant instanceof FieldRefConstant c) {
@@ -349,14 +349,14 @@ public class Disassembler {
             String className = constantPool.getClassName(c.getClassIndex());
             String name = constantPool.getStringFromUtf8(nameAndType.getNameIndex());
             String descriptor = constantPool.getStringFromUtf8(nameAndType.getDescriptorIndex());
-            write("d_field c%d \"%s\" \"%s\" \"%s\"", index, name, descriptor, className);
+            write("d_field   c%d \"%s\" \"%s\" \"%s\"", index, name, descriptor, className);
         } else if (constant instanceof MethodRefConstant c) {
             NameAndTypeConstant nameAndType = constantPool
                     .get(c.getNameAndTypeIndex(), NameAndTypeConstant.class);
             String className = constantPool.getClassName(c.getClassIndex());
             String name = constantPool.getStringFromUtf8(nameAndType.getNameIndex());
             String descriptor = constantPool.getStringFromUtf8(nameAndType.getDescriptorIndex());
-            write("d_method c%d \"%s\" \"%s\" \"%s\"", index, name, descriptor, className);
+            write("d_method  c%d \"%s\" \"%s\" \"%s\"", index, name, descriptor, className);
         } else if (constant instanceof InterfaceMethodRefConstant c) {
             NameAndTypeConstant nameAndType = constantPool
                     .get(c.getNameAndTypeIndex(), NameAndTypeConstant.class);

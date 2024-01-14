@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.parser;
 
 import au.id.villar.bytecode.AccessFlags;
-import au.id.villar.bytecode.Class;
+import au.id.villar.bytecode.ClassFile;
 import au.id.villar.bytecode.Field;
 import au.id.villar.bytecode.Method;
 import au.id.villar.bytecode.attribute.Attribute;
@@ -21,10 +21,10 @@ import java.util.List;
 class ParserClassFileHandler implements ClassFileHandler {
 
     private ConstantPool constantPool;
-    private final Class aClass;
+    private final ClassFile aClass;
     private final AttributeGenerator attrGenerator;
 
-    public ParserClassFileHandler(Class aClass) {
+    public ParserClassFileHandler(ClassFile aClass) {
         this.aClass = aClass;
         this.attrGenerator = new DefaultAttributeGenerator();
     }
