@@ -1,4 +1,4 @@
-package au.id.villar.bytecode.parser;
+package au.id.villar.bytecode.compiler;
 
 import au.id.villar.bytecode.ClassFile;
 import au.id.villar.bytecode.constant.ClassConstant;
@@ -121,8 +121,8 @@ public class ClassFileParserTest {
             assertEquals(50, classFile.getMayor());
 
 
-            System.out.println(">>> " + classFile.getConstants().getIndexes().size());
-            for (Integer index : classFile.getConstants().getIndexes()) {
+            System.out.println(">>> " + classFile.getConstants().getOrderedIndexes().size());
+            for (Integer index : classFile.getConstants().getOrderedIndexes()) {
                 Constant constant = classFile.getConstants().get(index);
                 System.out.format(">> %3d: %s%n", index, constant.toString());
             }

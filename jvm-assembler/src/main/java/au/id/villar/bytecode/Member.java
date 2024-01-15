@@ -2,34 +2,32 @@ package au.id.villar.bytecode;
 
 import au.id.villar.bytecode.attribute.Attribute;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 class Member {
 
     private final AccessFlags accessFlags;
-    private final String name;
-    private final String descriptor;
+    private final Integer nameIndex;
+    private final Integer descriptorIndex;
     private final List<Attribute> attributes;
 
-    public Member(AccessFlags accessFlags, String name, String descriptor, List<Attribute> attributes) {
+    public Member(AccessFlags accessFlags, Integer nameIndex, Integer descriptorIndex, List<Attribute> attributes) {
         this.accessFlags = accessFlags;
-        this.name = name;
-        this.descriptor = descriptor;
-        this.attributes = Collections.unmodifiableList(new ArrayList<>(attributes));
+        this.nameIndex = nameIndex;
+        this.descriptorIndex = descriptorIndex;
+        this.attributes = List.copyOf(attributes);
     }
 
     public AccessFlags getAccessFlags() {
         return accessFlags;
     }
 
-    public String getName() {
-        return name;
+    public Integer getNameIndex() {
+        return nameIndex;
     }
 
-    public String getDescriptor() {
-        return descriptor;
+    public Integer getDescriptorIndex() {
+        return descriptorIndex;
     }
 
     public List<Attribute> getAttributes() {
@@ -40,8 +38,8 @@ class Member {
     public String toString() {
         return this.getClass().getSimpleName() + "{" +
                 "accessFlags=" + accessFlags +
-                ", name='" + name + '\'' +
-                ", descriptor='" + descriptor + '\'' +
+                ", name='" + nameIndex + '\'' +
+                ", descriptor='" + descriptorIndex + '\'' +
                 ", attributes=" + attributes +
                 '}';
     }

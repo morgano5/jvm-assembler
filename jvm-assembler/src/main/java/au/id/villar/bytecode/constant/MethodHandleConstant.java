@@ -1,10 +1,11 @@
 package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
-public final class MethodHandleConstant extends Constant {
+public final class MethodHandleConstant extends Constant implements LoadableConstant {
 
     private MethodHandleReferenceKind referenceKind;
     private int referenceIndex;
@@ -43,5 +44,12 @@ public final class MethodHandleConstant extends Constant {
                 "referenceKind=" + referenceKind +
                 ", referenceIndex=" + referenceIndex +
                 '}';
+    }
+
+    @Override
+    public void write(BytesWriter bytesWriter) throws IOException {
+        bytesWriter.writeByte(15);
+        bytesWriter.writeByte(referenceKind.KIND);
+        bytesWriter.writeShort(referenceIndex);
     }
 }

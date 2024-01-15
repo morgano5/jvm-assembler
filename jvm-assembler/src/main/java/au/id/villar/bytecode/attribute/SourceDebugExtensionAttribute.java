@@ -17,6 +17,6 @@ public class SourceDebugExtensionAttribute extends StringAttribute {
     @Override
     public void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException {
-        value = bytesReader.readUTF8String(length);
+        value = bytesReader.readModUtf8(length);
     }
 }

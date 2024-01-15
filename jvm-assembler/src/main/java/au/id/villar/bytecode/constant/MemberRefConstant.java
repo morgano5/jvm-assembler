@@ -1,6 +1,7 @@
 package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
@@ -34,5 +35,14 @@ public abstract sealed class MemberRefConstant
 
     @Override
     public abstract String toString();
+
+    @Override
+    public void write(BytesWriter bytesWriter) throws IOException {
+        bytesWriter.writeByte(getRawTag());
+        bytesWriter.writeShort(classIndex);
+        bytesWriter.writeShort(nameAndTypeIndex);
+    }
+
+    protected abstract byte getRawTag();
 
 }

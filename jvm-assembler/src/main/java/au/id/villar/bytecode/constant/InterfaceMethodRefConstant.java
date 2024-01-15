@@ -15,4 +15,9 @@ public final class InterfaceMethodRefConstant extends MemberRefConstant {
                 ", nameAndTypeIndex=" + nameAndTypeIndex +
                 '}';
     }
+
+    @Override
+    protected byte getRawTag() {
+        return 11;
+    }
 }

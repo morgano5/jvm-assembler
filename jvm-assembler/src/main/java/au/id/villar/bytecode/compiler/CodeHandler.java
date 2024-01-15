@@ -1,4 +1,4 @@
-package au.id.villar.bytecode.parser;
+package au.id.villar.bytecode.compiler;
 
 import java.util.Iterator;
 import java.util.Map;

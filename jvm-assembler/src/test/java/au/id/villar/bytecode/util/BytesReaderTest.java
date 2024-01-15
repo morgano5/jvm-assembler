@@ -31,15 +31,17 @@ public class BytesReaderTest {
     @Test
     void shouldReadModifiedUtf() throws IOException {
 
-        BytesReader reader = createStream(0x00, 0x01, 0x58,         // 'X'  (0x88)
+        BytesReader reader = createStream(0x00, 0x02, 0xC0, 0x80,   // \0   (0x00)
+                0x00, 0x01, 0x58,                                   // 'X'  (0x88)
                 0x00, 0x02, 0xC3, 0xB1,                             // 'ñ'  (0xF1)
                 0x00, 0x03, 0xE0, 0xA4, 0xB9,                       // 'ह'  (0x939)
                 0x00, 0x06, 0xED, 0xA1, 0x80, 0xED, 0xBD, 0x88);    // '𐍈'  (0x10348)
 
-        assertEquals("X", reader.readUTF8String(), "Should read range 1 to 0x7F of modified UTF8");
-        assertEquals("ñ", reader.readUTF8String(), "Should read range 0x80 to 0x7FF of modified UTF8");
-        assertEquals("ह", reader.readUTF8String(), "Should read range 0x800 to 0xFFFF of modified UTF8");
-        assertEquals("𐍈", reader.readUTF8String(), "Should read range 0x10000 to 0x10FFFF of modified UTF8");
+        assertEquals("\0", reader.readModUtf8(), "Should read char 0 of modified UTF8");
+        assertEquals("X", reader.readModUtf8(), "Should read range 1 to 0x7F of modified UTF8");
+        assertEquals("ñ", reader.readModUtf8(), "Should read range 0x80 to 0x7FF of modified UTF8");
+        assertEquals("ह", reader.readModUtf8(), "Should read range 0x800 to 0xFFFF of modified UTF8");
+        assertEquals("𐍈", reader.readModUtf8(), "Should read range 0x10000 to 0x10FFFF of modified UTF8");
     }
 
     private BytesReader createStream(int ... bytes) {

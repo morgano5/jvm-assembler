@@ -1,16 +1,13 @@
 package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
 public abstract sealed class Constant
-        permits AbstractDynamicConstant,
-        IndexToUtf8Constant,
-        MemberRefConstant,
-        MethodHandleConstant,
-        NameAndTypeConstant,
-        ValueConstant {
+        permits AbstractDynamicConstant, DoubleConstant, FloatConstant, IndexToUtf8Constant, IntegerConstant,
+            LongConstant, MemberRefConstant, MethodHandleConstant, NameAndTypeConstant, Utf8Constant {
 
     public static Constant readConstant(BytesReader bytesReader) throws IOException {
 
@@ -53,12 +50,26 @@ public abstract sealed class Constant
         if (constant instanceof IndexToUtf8Constant con) {
             return constantPool.getStringFromUtf8(con.utf8Index);
         }
-        if (constant instanceof ValueConstant con) {
-            return con.toStringValue();
+        if (constant instanceof Utf8Constant con) {
+            return con.getValue();
+        }
+        if (constant instanceof IntegerConstant con) {
+            return String.valueOf(con.getValue());
+        }
+        if (constant instanceof FloatConstant con) {
+            return String.valueOf(con.getValue());
+        }
+        if (constant instanceof LongConstant con) {
+            return String.valueOf(con.getValue());
+        }
+        if (constant instanceof DoubleConstant con) {
+            return String.valueOf(con.getValue());
         }
 
         throw new RuntimeException("Unexpected constant type: " + constant.getClass().getSimpleName());
     }
+
+    public abstract void write(BytesWriter bytesWriter) throws IOException;
 
     abstract void parseBody(BytesReader bytesReader) throws IOException;
 

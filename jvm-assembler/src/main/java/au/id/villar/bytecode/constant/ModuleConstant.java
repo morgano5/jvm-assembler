@@ -16,4 +16,9 @@ public final class ModuleConstant extends IndexToUtf8Constant {
     public String toString() {
         return "ModuleConstant{" + utf8Index + '}';
     }
+
+    @Override
+    protected byte getRawTag() {
+        return 19;
+    }
 }

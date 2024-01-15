@@ -15,4 +15,9 @@ public final class InvokeDynamicConstant extends AbstractDynamicConstant {
                 ", nameAndTypeIndex=" + nameAndTypeIndex +
                 '}';
     }
+
+    @Override
+    protected byte getRawTag() {
+        return 18;
+    }
 }

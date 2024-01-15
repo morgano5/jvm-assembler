@@ -1,6 +1,7 @@
 package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
@@ -21,4 +22,11 @@ public abstract sealed class IndexToUtf8Constant
     void parseBody(BytesReader bytesReader) throws IOException {
         utf8Index = bytesReader.readShort();
     }
+    @Override
+    public void write(BytesWriter bytesWriter) throws IOException {
+        bytesWriter.writeByte(getRawTag());
+        bytesWriter.writeShort(utf8Index);
+    }
+
+    protected abstract byte getRawTag();
 }

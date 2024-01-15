@@ -1,10 +1,11 @@
 package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
-public final class DoubleConstant extends ValueConstant {
+public final class DoubleConstant extends Constant implements LoadableConstant {
 
     private double value;
 
@@ -24,12 +25,13 @@ public final class DoubleConstant extends ValueConstant {
     }
 
     @Override
-    public String toStringValue() {
-        return String.valueOf(getValue());
+    public String toString() {
+        return "DoubleConstant{" + value + '}';
     }
 
     @Override
-    public String toString() {
-        return "DoubleConstant{" + value + '}';
+    public void write(BytesWriter bytesWriter) throws IOException {
+        bytesWriter.writeByte(6);
+        bytesWriter.writeDouble(value);
     }
 }

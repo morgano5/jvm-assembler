@@ -1,10 +1,11 @@
 package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
-public final class FloatConstant extends ValueConstant {
+public final class FloatConstant extends Constant implements LoadableConstant {
 
     private float value;
 
@@ -24,12 +25,13 @@ public final class FloatConstant extends ValueConstant {
     }
 
     @Override
-    public String toStringValue() {
-        return String.valueOf(getValue());
+    public String toString() {
+        return "FloatConstant{" + value + '}';
     }
 
     @Override
-    public String toString() {
-        return "FloatConstant{" + value + '}';
+    public void write(BytesWriter bytesWriter) throws IOException {
+        bytesWriter.writeByte(4);
+        bytesWriter.writeFloat(value);
     }
 }

@@ -1,10 +1,11 @@
 package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
-public final class LongConstant extends ValueConstant {
+public final class LongConstant extends Constant implements LoadableConstant {
 
     private long value;
 
@@ -24,12 +25,13 @@ public final class LongConstant extends ValueConstant {
     }
 
     @Override
-    public String toStringValue() {
-        return String.valueOf(getValue());
+    public String toString() {
+        return "LongConstant{" + value + '}';
     }
 
     @Override
-    public String toString() {
-        return "LongConstant{" + value + '}';
+    public void write(BytesWriter bytesWriter) throws IOException {
+        bytesWriter.writeByte(5);
+        bytesWriter.writeLong(value);
     }
 }

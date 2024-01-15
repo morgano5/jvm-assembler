@@ -1,7 +1,7 @@
 package au.id.villar.bytecode.assembly;
 
 import au.id.villar.bytecode.ClassFile;
-import au.id.villar.bytecode.parser.ClassFileParser;
+import au.id.villar.bytecode.compiler.ClassFileParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

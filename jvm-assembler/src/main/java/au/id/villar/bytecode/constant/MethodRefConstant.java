@@ -15,4 +15,9 @@ public final class MethodRefConstant extends MemberRefConstant {
                 ", nameAndTypeIndex=" + nameAndTypeIndex +
                 '}';
     }
+
+    @Override
+    protected byte getRawTag() {
+        return 10;
+    }
 }

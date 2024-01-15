@@ -16,4 +16,9 @@ public final class PackageConstant extends IndexToUtf8Constant {
     public String toString() {
         return "PackageConstant{" + utf8Index + '}';
     }
+
+    @Override
+    protected byte getRawTag() {
+        return 20;
+    }
 }

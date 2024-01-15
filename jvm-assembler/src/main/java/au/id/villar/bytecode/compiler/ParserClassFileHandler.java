@@ -1,4 +1,4 @@
-package au.id.villar.bytecode.parser;
+package au.id.villar.bytecode.compiler;
 
 import au.id.villar.bytecode.AccessFlags;
 import au.id.villar.bytecode.ClassFile;
@@ -56,15 +56,13 @@ class ParserClassFileHandler implements ClassFileHandler {
                 classFile.setAccessFlags(new AccessFlags((short) number, AccessFlags.FlagsType.CLASS));
                 break;
             case THIS_INDEX:
-                classFile.setName(constantPool.getClassName(number));
+                classFile.setNameIndex(number);
                 break;
             case SUPER_INDEX:
-                if (number != 0) {
-                    classFile.setSuperClass(constantPool.getClassName(number));
-                }
+                classFile.setSuperClassIndex(number);
                 break;
             case INTERFACES:
-                classFile.setInterfaces(new ArrayList<>(number));
+                classFile.setInterfaceIndexes(new ArrayList<>(number));
                 break;
             case FIELDS:
                 classFile.setFields(new ArrayList<>(number));
@@ -96,7 +94,7 @@ class ParserClassFileHandler implements ClassFileHandler {
 
     @Override
     public final boolean interfaceIndex(int constantPoolIndex) {
-        classFile.getInterfaces().add(constantPool.getClassName(constantPoolIndex));
+        classFile.getInterfaceIndexes().add(constantPoolIndex);
         return true;
     }
 
@@ -107,10 +105,7 @@ class ParserClassFileHandler implements ClassFileHandler {
             void execute() {
                 classFile.getFields().add(new Field(
                         new AccessFlags((short) accessFlags, AccessFlags.FlagsType.FIELD),
-                        constantPool.getStringFromUtf8(nameIndex),
-                        constantPool.getStringFromUtf8(descriptorIndex),
-                        attrs
-                ));
+                        nameIndex, descriptorIndex, attrs));
             }
         };
         attrCounters.offerFirst(attrCounter);
@@ -124,10 +119,7 @@ class ParserClassFileHandler implements ClassFileHandler {
             void execute() {
                 classFile.getMethods().add(new Method(
                         new AccessFlags((short) accessFlags, AccessFlags.FlagsType.METHOD),
-                        constantPool.getStringFromUtf8(nameIndex),
-                        constantPool.getStringFromUtf8(descriptorIndex),
-                        attrs
-                ));
+                        nameIndex, descriptorIndex, attrs));
             }
         };
         attrCounters.offerFirst(attrCounter);

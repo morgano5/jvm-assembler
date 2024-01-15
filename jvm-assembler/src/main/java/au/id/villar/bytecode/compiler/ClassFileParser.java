@@ -1,4 +1,4 @@
-package au.id.villar.bytecode.parser;
+package au.id.villar.bytecode.compiler;
 
 import au.id.villar.bytecode.ClassFile;
 import au.id.villar.bytecode.constant.Constant;

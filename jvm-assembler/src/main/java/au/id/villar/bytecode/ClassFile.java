@@ -11,9 +11,9 @@ public class ClassFile {
     private int minor;
     private AccessFlags accessFlags;
     private ConstantPool constants;
-    private String name;
-    private String superClass;
-    private List<String> interfaces;
+    private Integer nameIndex;
+    private Integer superClassIndex;
+    private List<Integer> interfaceIndexes;
     private List<Field> fields;
     private List<Method> methods;
     private List<Attribute> attributes;
@@ -42,20 +42,28 @@ public class ClassFile {
         this.constants = constants;
     }
 
-    public String getName() {
-        return name;
+    public Integer getNameIndex() {
+        return nameIndex;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameIndex(Integer nameIndex) {
+        this.nameIndex = nameIndex;
+    }
+
+    public String getName() {
+        return constants.getClassName(nameIndex);
+    }
+
+    public Integer getSuperClassIndex() {
+        return superClassIndex;
+    }
+
+    public void setSuperClassIndex(Integer superClassIndex) {
+        this.superClassIndex = superClassIndex;
     }
 
     public String getSuperClass() {
-        return superClass;
-    }
-
-    public void setSuperClass(String superClass) {
-        this.superClass = superClass;
+        return constants.getClassName(superClassIndex);
     }
 
     public AccessFlags getAccessFlags() {
@@ -66,12 +74,12 @@ public class ClassFile {
         this.accessFlags = accessFlags;
     }
 
-    public List<String> getInterfaces() {
-        return interfaces;
+    public List<Integer> getInterfaceIndexes() {
+        return interfaceIndexes;
     }
 
-    public void setInterfaces(List<String> interfaces) {
-        this.interfaces = interfaces;
+    public void setInterfaceIndexes(List<Integer> interfaceIndexes) {
+        this.interfaceIndexes = interfaceIndexes;
     }
 
     public List<Field> getFields() {
@@ -101,13 +109,13 @@ public class ClassFile {
     @Override
     public String toString() {
         return "ClassFile{" +
-                "name='" + name + '\'' +
+                "nameIndex='" + nameIndex + '\'' +
                 ", mayor=" + mayor +
                 ", minor=" + minor +
                 ", constants=" + constants +
                 ", accessFlags=" + accessFlags +
-                ", superClass='" + superClass + '\'' +
-                ", interfaces=" + interfaces +
+                ", superClassIndex='" + superClassIndex + '\'' +
+                ", interfaces=" + interfaceIndexes +
                 ", fields=" + fields +
                 ", methods=" + methods +
                 ", attributes=" + attributes +

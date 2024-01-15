@@ -42,6 +42,10 @@ public class AccessFlags {
         this.flags = flags;
     }
 
+    public short getFlags() {
+        return flags;
+    }
+
     public boolean isPublic() {
         return hasFlagAndBelongsToOneClass(flags, ACC_PUBLIC, CLASS, FIELD, METHOD, INNER_CLASS);
     }

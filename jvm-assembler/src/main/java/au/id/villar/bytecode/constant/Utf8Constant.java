@@ -1,10 +1,11 @@
 package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
-public final class Utf8Constant extends ValueConstant {
+public final class Utf8Constant extends Constant {
 
     private String value;
 
@@ -20,10 +21,9 @@ public final class Utf8Constant extends ValueConstant {
 
     @Override
     void parseBody(BytesReader bytesReader) throws IOException {
-        value = bytesReader.readUTF8String();
+        value = bytesReader.readModUtf8();
     }
 
-    @Override
     public String toStringValue() {
         return getValue();
     }
@@ -31,5 +31,11 @@ public final class Utf8Constant extends ValueConstant {
     @Override
     public String toString() {
         return "Utf8Constant{'" + value + "'}";
+    }
+
+    @Override
+    public void write(BytesWriter bytesWriter) throws IOException {
+        bytesWriter.writeByte(1);
+        bytesWriter.writeModUtf8(value);
     }
 }

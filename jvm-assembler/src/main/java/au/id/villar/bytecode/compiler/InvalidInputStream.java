@@ -1,4 +1,4 @@
-package au.id.villar.bytecode.parser;
+package au.id.villar.bytecode.compiler;
 
 import java.io.IOException;
 import java.io.InputStream;

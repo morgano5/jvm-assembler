@@ -6,8 +6,8 @@ import au.id.villar.bytecode.Field;
 import au.id.villar.bytecode.Method;
 import au.id.villar.bytecode.attribute.Attribute;
 import au.id.villar.bytecode.attribute.CodeAttribute;
-import au.id.villar.bytecode.parser.CodeHandler;
-import au.id.villar.bytecode.parser.CodeParser;
+import au.id.villar.bytecode.compiler.CodeHandler;
+import au.id.villar.bytecode.compiler.CodeParser;
 import au.id.villar.bytecode.constant.ClassConstant;
 import au.id.villar.bytecode.constant.DoubleConstant;
 import au.id.villar.bytecode.constant.DynamicConstant;
@@ -82,25 +82,27 @@ public class Disassembler {
         if (!OBJECT_CLASS_NAME.equals(classFile.getSuperClass())) {
             write("%s.super \"%s\"%n", INDENTATION, classFile.getSuperClass());
         }
-        for (String iface : classFile.getInterfaces()) {
-            write("%s.implements \"%s\"%n", INDENTATION, iface);
+        for (Integer iface : classFile.getInterfaceIndexes()) {
+            write("%s.implements \"%s\"%n", INDENTATION, classFile.getConstants().getClassName(iface));
         }
     }
 
     private void writeField(Field field) {
-        write("%nFIELD \"%s\"%n", field.getName());
+        write("%nFIELD \"%s\"%n", classFile.getConstants().getStringFromUtf8(field.getNameIndex()));
         write("%s.access", INDENTATION);
         writeFlags(field.getAccessFlags());
         write("%n");
-        write("%s.descriptor \"%s\"%n", INDENTATION, field.getDescriptor());
+        write("%s.descriptor \"%s\"%n", INDENTATION,
+                classFile.getConstants().getStringFromUtf8(field.getDescriptorIndex()));
     }
 
     private void writeMethod(Method method, ConstantPool constants) throws IOException {
-        write("%nMETHOD \"%s\"%n", method.getName());
+        write("%nMETHOD \"%s\"%n", classFile.getConstants().getStringFromUtf8(method.getNameIndex()));
         write("%s.access", INDENTATION);
         writeFlags(method.getAccessFlags());
         write("%n");
-        write("%s.descriptor \"%s\"%n", INDENTATION, method.getDescriptor());
+        write("%s.descriptor \"%s\"%n", INDENTATION,
+                classFile.getConstants().getStringFromUtf8(method.getDescriptorIndex()));
 
         for (Attribute attribute : method.getAttributes()) {
             if (attribute instanceof CodeAttribute codeAttribute) {

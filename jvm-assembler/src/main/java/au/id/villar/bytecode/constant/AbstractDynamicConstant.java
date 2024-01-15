@@ -1,6 +1,7 @@
 package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
@@ -27,12 +28,17 @@ public abstract sealed class AbstractDynamicConstant
     AbstractDynamicConstant() {}
 
     @Override
+    public void write(BytesWriter bytesWriter) throws IOException {
+        bytesWriter.writeByte(getRawTag());
+        bytesWriter.writeShort(bootstrapMethodAttrIndex);
+        bytesWriter.writeShort(nameAndTypeIndex);
+    }
+
+    @Override
     void parseBody(BytesReader bytesReader) throws IOException {
         bootstrapMethodAttrIndex = bytesReader.readShort();
         nameAndTypeIndex = bytesReader.readShort();
     }
 
-    @Override
-    public abstract String toString();
-
+    protected abstract byte getRawTag();
 }

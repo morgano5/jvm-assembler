@@ -1,6 +1,7 @@
 package au.id.villar.bytecode.constant;
 
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
@@ -36,5 +37,12 @@ public final class NameAndTypeConstant extends Constant {
                 "nameIndex=" + nameIndex +
                 ", descriptorIndex=" + descriptorIndex +
                 '}';
+    }
+
+    @Override
+    public void write(BytesWriter bytesWriter) throws IOException {
+        bytesWriter.writeByte(12);
+        bytesWriter.writeShort(nameIndex);
+        bytesWriter.writeShort(descriptorIndex);
     }
 }

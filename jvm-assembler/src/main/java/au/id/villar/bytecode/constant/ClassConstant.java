@@ -1,6 +1,6 @@
 package au.id.villar.bytecode.constant;
 
-public final class ClassConstant extends IndexToUtf8Constant {
+public final class ClassConstant extends IndexToUtf8Constant implements LoadableConstant {
 
     public ClassConstant(int nameIndex) {
         super(nameIndex);
@@ -15,5 +15,10 @@ public final class ClassConstant extends IndexToUtf8Constant {
     @Override
     public String toString() {
         return "ClassConstant{" + utf8Index + '}';
+    }
+
+    @Override
+    protected byte getRawTag() {
+        return 7;
     }
 }

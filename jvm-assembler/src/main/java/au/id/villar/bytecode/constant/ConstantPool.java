@@ -1,8 +1,9 @@
 package au.id.villar.bytecode.constant;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class ConstantPool {
 
@@ -29,8 +30,16 @@ public class ConstantPool {
         return type.cast(constant);
     }
 
-    public Set<Integer> getIndexes() {
-        return constants.keySet();
+    public LoadableConstant getLoadable(Integer index) {
+        Constant constant = get(index);
+        if (constant instanceof LoadableConstant loadable) {
+            return loadable;
+        }
+        throw new IllegalArgumentException("Constant of index (" + index + ") ");
+    }
+
+    public List<Integer> getOrderedIndexes() {
+        return constants.keySet().stream().sorted(Comparator.comparingInt(i -> i)).toList();
     }
 
     public String getStringFromUtf8(Integer utf8Index) {

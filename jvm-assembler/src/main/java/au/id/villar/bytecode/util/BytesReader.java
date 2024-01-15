@@ -53,11 +53,11 @@ public class BytesReader {
         return Double.longBitsToDouble(raw);
     }
 
-    public String readUTF8String() throws IOException {
-        return readUTF8String(readShort());
+    public String readModUtf8() throws IOException {
+        return readModUtf8(readShort());
     }
 
-    public String readUTF8String(int length) throws IOException {
+    public String readModUtf8(int length) throws IOException {
         StringBuilder builder = new StringBuilder(length);
 
         while (length > 0) {

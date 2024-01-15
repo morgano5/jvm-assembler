@@ -2,6 +2,7 @@ package au.id.villar.bytecode.attribute;
 
 import au.id.villar.bytecode.constant.ConstantPool;
 import au.id.villar.bytecode.util.BytesReader;
+import au.id.villar.bytecode.util.BytesWriter;
 
 import java.io.IOException;
 
@@ -47,4 +48,8 @@ public abstract class Attribute {
     public abstract void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException;
 
+    //public abstract void write(BytesWriter bytesWriter) throws IOException;
+    public void write(BytesWriter bytesWriter) throws IOException {
+        //.. .. ..
+    }
 }
