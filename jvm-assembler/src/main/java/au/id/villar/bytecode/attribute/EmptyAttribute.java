@@ -10,7 +10,7 @@ class EmptyAttribute extends Attribute {
     @Override
     public void parseBody(int nameIndex, int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException {
-        // DO nothing
+        this.nameIndex = nameIndex;
     }
 
     @Override
