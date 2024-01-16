@@ -48,8 +48,8 @@ public class CodeAttribute extends Attribute {
         this.maxStack = maxStack;
         this.maxLocals = maxLocals;
         this.code = code;
-        this.exceptionTable = Collections.unmodifiableList(new ArrayList<>(exceptionTable));
-        this.attributes = Collections.unmodifiableList(new ArrayList<>(attributes));
+        this.exceptionTable = List.copyOf(exceptionTable);
+        this.attributes = List.copyOf(attributes);
     }
 
     CodeAttribute() {}
@@ -79,8 +79,9 @@ public class CodeAttribute extends Attribute {
     }
 
     @Override
-    public void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
+    public void parseBody(int nameIndex, int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException {
+        this.nameIndex = nameIndex;
         maxStack = bytesReader.readShort();
         maxLocals = bytesReader.readShort();
         int codeLength = bytesReader.readInt();
@@ -96,8 +97,8 @@ public class CodeAttribute extends Attribute {
         int numAttributes = bytesReader.readShort();
         List<Attribute> attributes = new ArrayList<>(numAttributes);
         for(int count = 0; count < numAttributes; count++) {
-            String name = constantPool.getStringFromUtf8(bytesReader.readShort());
-            attributes.add(Attribute.readAttribute(name, bytesReader.readInt(), bytesReader, constantPool, generator));
+            attributes.add(Attribute.readAttribute(bytesReader.readShort(), bytesReader.readInt(), bytesReader,
+                    constantPool, generator));
         }
         this.attributes = Collections.unmodifiableList(attributes);
     }

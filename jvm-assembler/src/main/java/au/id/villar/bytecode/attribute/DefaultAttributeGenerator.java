@@ -8,7 +8,7 @@ import java.io.IOException;
 public class DefaultAttributeGenerator implements AttributeGenerator {
 
     @Override
-    public <T extends Attribute> T readAttribute(Class<T> type, int length, BytesReader bytesReader,
+    public <T extends Attribute> T readAttribute(Class<T> type, Integer nameIndex, int length, BytesReader bytesReader,
             ConstantPool constantPool, AttributeGenerator generator) throws IOException {
 
         final Attribute attribute;
@@ -58,19 +58,13 @@ public class DefaultAttributeGenerator implements AttributeGenerator {
             attribute = new BootstrapMethodsAttribute();
         } else if (type == MethodParametersAttribute.class) {
             attribute = new MethodParametersAttribute();
+        } else if (type == GenericAttribute.class) {
+            attribute = new GenericAttribute();
         } else {
             throw new IllegalStateException("Unknown attribute type: " + type.getName());
         }
 
-        attribute.parseBody(length, bytesReader, constantPool, generator);
+        attribute.parseBody(nameIndex, length, bytesReader, constantPool, generator);
         return type.cast(attribute);
-    }
-
-    @Override
-    public GenericAttribute readGenericAttribute(String name, int length, BytesReader bytesReader,
-            ConstantPool constantPool, AttributeGenerator generator) throws IOException {
-        GenericAttribute attribute = new GenericAttribute(name);
-        attribute.parseBody(length, bytesReader, constantPool, generator);
-        return attribute;
     }
 }

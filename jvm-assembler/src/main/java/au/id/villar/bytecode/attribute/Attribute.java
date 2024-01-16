@@ -8,9 +8,14 @@ import java.io.IOException;
 
 public abstract class Attribute {
 
-    public static Attribute readAttribute(String name, int length, BytesReader bytesReader,
+    protected Integer nameIndex;
+
+    Attribute() {}
+
+    public static Attribute readAttribute(int nameIndex, int length, BytesReader bytesReader,
             ConstantPool constantPool, AttributeGenerator generator) throws IOException {
 
+        String name = constantPool.getStringFromUtf8(nameIndex);
         Class<? extends Attribute> attributeClass = switch (name) {
             case "Code" -> CodeAttribute.class;
             case "ConstantValue" -> ConstantValueAttribute.class;
@@ -38,14 +43,14 @@ public abstract class Attribute {
             default -> GenericAttribute.class;
         };
 
-        return attributeClass == GenericAttribute.class
-                ? generator.readGenericAttribute(name, length, bytesReader, constantPool, generator)
-                : generator.readAttribute(attributeClass, length, bytesReader, constantPool, generator);
+        return generator.readAttribute(attributeClass, nameIndex, length, bytesReader, constantPool, generator);
     }
 
-    Attribute() {}
+    public Integer getNameIndex() {
+        return nameIndex;
+    }
 
-    public abstract void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
+    public abstract void parseBody(int nameIndex, int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException;
 
     //public abstract void write(BytesWriter bytesWriter) throws IOException;

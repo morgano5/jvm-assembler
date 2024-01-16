@@ -26,8 +26,9 @@ public class AnnotationDefaultAttribute extends Attribute {
     }
 
     @Override
-    public void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
+    public void parseBody(int nameIndex, int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException {
+        this.nameIndex = nameIndex;
         defaultValue = new byte[length];
         bytesReader.readMinimum(defaultValue, length);
     }

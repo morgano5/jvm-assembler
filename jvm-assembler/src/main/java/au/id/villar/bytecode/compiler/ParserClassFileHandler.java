@@ -129,10 +129,10 @@ class ParserClassFileHandler implements ClassFileHandler {
     @Override
     public final boolean attribute(int nameIndex, int length, InputStream info) {
         AttrCounter attrCounter = attrCounters.peekFirst();
-        String name = constantPool.getStringFromUtf8(nameIndex);
         Attribute attribute;
         try {
-            attribute = Attribute.readAttribute(name, length, bytesReader.reuse(info), constantPool, attrGenerator);
+            attribute = Attribute.readAttribute(nameIndex, length, bytesReader.reuse(info), constantPool,
+                    attrGenerator);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

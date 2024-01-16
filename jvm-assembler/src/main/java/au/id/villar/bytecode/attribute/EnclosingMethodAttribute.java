@@ -22,7 +22,7 @@ public class EnclosingMethodAttribute extends Attribute {
     }
 
     @Override
-    public void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
+    public void parseBody(int nameIndex, int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException {
         String className = Constant.toString(bytesReader.readShort(), constantPool);
         NameAndTypeConstant methodInfo = (NameAndTypeConstant)constantPool.get(bytesReader.readShort());

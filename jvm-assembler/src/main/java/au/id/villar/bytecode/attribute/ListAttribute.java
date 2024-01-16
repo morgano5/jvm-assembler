@@ -17,8 +17,9 @@ abstract class ListAttribute<T> extends Attribute {
     }
 
     @Override
-    public final void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
+    public final void parseBody(int nameIndex, int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException {
+        this.nameIndex = nameIndex;
         int size = bytesReader.readShort();
         list = new ArrayList<>(size);
         while(size-- > 0) {

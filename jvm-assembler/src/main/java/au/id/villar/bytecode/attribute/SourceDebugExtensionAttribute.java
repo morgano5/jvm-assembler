@@ -11,12 +11,12 @@ public class SourceDebugExtensionAttribute extends StringAttribute {
         super(value);
     }
 
-    SourceDebugExtensionAttribute() {
-    }
+    SourceDebugExtensionAttribute() {}
 
     @Override
-    public void parseBody(int length, BytesReader bytesReader, ConstantPool constantPool,
+    public void parseBody(int nameIndex, int length, BytesReader bytesReader, ConstantPool constantPool,
             AttributeGenerator generator) throws IOException {
+        this.nameIndex = nameIndex;
         value = bytesReader.readModUtf8(length);
     }
 }
